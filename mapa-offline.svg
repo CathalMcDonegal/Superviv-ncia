@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+<rect width="1200" height="900" fill="#dceff7"/>
+<path d="M120 115 L270 70 420 105 545 80 680 125 820 105 1010 180 1080 330 1030 470 1080 620 965 735 820 710 710 815 555 790 420 850 285 785 205 660 110 585 150 450 85 330Z" fill="#f4f7ee" stroke="#274b68" stroke-width="8"/>
+<path d="M150 450 Q310 380 470 455 T800 405 T1030 470" fill="none" stroke="#8ab9cf" stroke-width="18"/>
+<path d="M250 170 Q350 300 300 470 T380 760 M520 115 Q590 250 550 390 T650 760 M790 145 Q720 300 790 430 T900 690 M160 590 Q400 530 620 580 T1010 520" fill="none" stroke="#d0d8c6" stroke-width="7"/>
+<g font-family="system-ui,Arial" fill="#10233f" font-weight="800">
+<text x="515" y="245" font-size="34">CATALUNYA</text>
+<text x="335" y="270" font-size="25">Lleida</text><text x="690" y="250" font-size="25">Girona</text>
+<text x="610" y="500" font-size="28">Barcelona</text><text x="350" y="610" font-size="25">Tarragona</text>
+<text x="575" y="535" font-size="18" fill="#64748b">Àrea metropolitana</text>
+</g>
+<g fill="#ed1b24" stroke="#fff" stroke-width="5"><circle cx="635" cy="490" r="13"/><circle cx="365" cy="595" r="11"/><circle cx="700" cy="250" r="11"/><circle cx="350" cy="255" r="11"/></g>
+<g font-family="system-ui,Arial" font-size="18" fill="#50657a"><text x="45" y="850">MAPA OFFLINE · SUPERVIVÈNCIA · EMERGÈNCIES</text></g>
+</svg>
