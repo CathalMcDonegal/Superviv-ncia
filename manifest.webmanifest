@@ -1,1 +1,22 @@
-{"name":"Preparats","short_name":"Preparats","description":"Guia d'emergències: kit, motxilla, pla familiar i què fer ara.","lang":"ca","start_url":"./","scope":"./","display":"standalone","orientation":"portrait","background_color":"#f5cf00","theme_color":"#f5cf00","icons":[{"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},{"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},{"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}]}
+{
+  "name": "Supervivència · Emergències",
+  "short_name": "Supervivència",
+  "description": "Guia pràctica per preparar-te davant d'una emergència.",
+  "lang": "ca",
+  "id": "./",
+  "start_url": "./?v=4",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "background_color": "#f3f7fb",
+  "theme_color": "#071a35",
+  "orientation": "portrait-primary",
+  "icons": [
+    {"src": "icon.svg?v=4", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ],
+  "shortcuts": [
+    {"name":"Què faig ara?","short_name":"Emergència","url":"./?v=4#now","icons":[{"src":"icon.svg?v=4","sizes":"any","type":"image/svg+xml"}]},
+    {"name":"Kit de casa","short_name":"Kit","url":"./?v=4#kit","icons":[{"src":"icon.svg?v=4","sizes":"any","type":"image/svg+xml"}]},
+    {"name":"Motxilla","short_name":"Motxilla","url":"./?v=4#bag","icons":[{"src":"icon.svg?v=4","sizes":"any","type":"image/svg+xml"}]}
+  ]
+}
