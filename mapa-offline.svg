@@ -1,14 +1,64 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
-<rect width="1200" height="900" fill="#dceff7"/>
-<path d="M120 115 L270 70 420 105 545 80 680 125 820 105 1010 180 1080 330 1030 470 1080 620 965 735 820 710 710 815 555 790 420 850 285 785 205 660 110 585 150 450 85 330Z" fill="#f4f7ee" stroke="#274b68" stroke-width="8"/>
-<path d="M150 450 Q310 380 470 455 T800 405 T1030 470" fill="none" stroke="#8ab9cf" stroke-width="18"/>
-<path d="M250 170 Q350 300 300 470 T380 760 M520 115 Q590 250 550 390 T650 760 M790 145 Q720 300 790 430 T900 690 M160 590 Q400 530 620 580 T1010 520" fill="none" stroke="#d0d8c6" stroke-width="7"/>
-<g font-family="system-ui,Arial" fill="#10233f" font-weight="800">
-<text x="515" y="245" font-size="34">CATALUNYA</text>
-<text x="335" y="270" font-size="25">Lleida</text><text x="690" y="250" font-size="25">Girona</text>
-<text x="610" y="500" font-size="28">Barcelona</text><text x="350" y="610" font-size="25">Tarragona</text>
-<text x="575" y="535" font-size="18" fill="#64748b">Àrea metropolitana</text>
+<rect width="1200" height="900" fill="#dff3fa"/>
+<defs>
+ <filter id="shadow"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity=".18"/></filter>
+ <style>
+ .land{fill:#f7f5e9;stroke:#294d67;stroke-width:7}
+ .prov{fill:none;stroke:#aab7a7;stroke-width:3;stroke-dasharray:10 8}
+ .road{fill:none;stroke:#e59b2f;stroke-width:8;stroke-linecap:round;opacity:.9}
+ .road2{fill:none;stroke:#f1c36a;stroke-width:4;stroke-linecap:round}
+ .river{fill:none;stroke:#46a9d2;stroke-width:9;stroke-linecap:round;opacity:.8}
+ .city{fill:#163552;stroke:#fff;stroke-width:4}
+ .citytext{font:800 22px system-ui,Arial;fill:#163552;paint-order:stroke;stroke:#fff;stroke-width:6}
+ .smalltext{font:700 16px system-ui,Arial;fill:#46627a}
+ .roadtext{font:900 15px system-ui,Arial;fill:#8a5710;paint-order:stroke;stroke:#fff8e8;stroke-width:5}
+ .rivertext{font:700 italic 16px system-ui,Arial;fill:#277fa8}
+ .title{font:900 34px system-ui,Arial;fill:#10233f}
+ </style>
+</defs>
+<!-- Catalunya -->
+<path class="land" d="M128 116 L270 68 421 105 548 82 682 125 825 104 1010 181 1082 327 1032 470 1080 619 965 739 821 713 711 816 553 792 420 850 283 786 203 661 109 586 149 451 84 331Z"/>
+<!-- province boundaries -->
+<path class="prov" d="M270 70 Q350 190 390 330 T420 850"/>
+<path class="prov" d="M420 105 Q530 170 610 300 T711 816"/>
+<path class="prov" d="M682 125 Q670 260 790 430 T965 739"/>
+<path class="prov" d="M150 450 Q330 430 520 455 T1032 470"/>
+<!-- main rivers -->
+<g id="rivers">
+ <path class="river" d="M120 300 Q230 360 315 405 Q400 445 505 510 Q590 565 670 620 Q760 675 900 705"/>
+ <path class="river" d="M205 170 Q285 270 355 350 Q420 430 520 500"/>
+ <path class="river" d="M705 145 Q690 235 735 325 Q780 410 805 520 Q835 625 900 705"/>
+ <text class="rivertext" x="720" y="645">Ebre</text><text class="rivertext" x="350" y="365">Segre</text><text class="rivertext" x="785" y="475">Ter</text>
 </g>
-<g fill="#ed1b24" stroke="#fff" stroke-width="5"><circle cx="635" cy="490" r="13"/><circle cx="365" cy="595" r="11"/><circle cx="700" cy="250" r="11"/><circle cx="350" cy="255" r="11"/></g>
-<g font-family="system-ui,Arial" font-size="18" fill="#50657a"><text x="45" y="850">MAPA OFFLINE · SUPERVIVÈNCIA · EMERGÈNCIES</text></g>
+<!-- main roads -->
+<g id="roads">
+ <path class="road" d="M220 135 Q410 260 550 385 Q700 520 960 715"/>
+ <path class="road" d="M120 535 Q320 500 520 510 Q760 525 1015 470"/>
+ <path class="road" d="M405 110 Q470 250 525 390 Q580 535 553 790"/>
+ <path class="road2" d="M720 145 Q650 300 620 430 Q600 570 705 810"/>
+ <path class="road2" d="M185 690 Q350 620 510 590 Q700 550 900 500"/>
+ <text class="roadtext" x="425" y="292" transform="rotate(38 425 292)">AP-7</text>
+ <text class="roadtext" x="770" y="550" transform="rotate(35 770 550)">N-340</text>
+ <text class="roadtext" x="493" y="370" transform="rotate(68 493 370)">A-2</text>
+ <text class="roadtext" x="635" y="340" transform="rotate(88 635 340)">C-25</text>
+ <text class="roadtext" x="650" y="675" transform="rotate(72 650 675)">C-12</text>
+</g>
+<!-- cities -->
+<g id="cities">
+ <circle class="city" cx="635" cy="490" r="12"/><text class="citytext" x="653" y="497">Barcelona</text>
+ <circle class="city" cx="365" cy="595" r="10"/><text class="citytext" x="383" y="602">Tarragona</text>
+ <circle class="city" cx="350" cy="255" r="10"/><text class="citytext" x="368" y="262">Lleida</text>
+ <circle class="city" cx="700" cy="250" r="10"/><text class="citytext" x="718" y="257">Girona</text>
+ <circle class="city" cx="545" cy="455" r="8"/><text class="smalltext" x="559" y="461">Manresa</text>
+ <circle class="city" cx="470" cy="430" r="8"/><text class="smalltext" x="484" y="436">Igualada</text>
+ <circle class="city" cx="600" cy="365" r="8"/><text class="smalltext" x="614" y="371">Vic</text>
+ <circle class="city" cx="455" cy="640" r="8"/><text class="smalltext" x="469" y="646">Reus</text>
+ <circle class="city" cx="755" cy="620" r="8"/><text class="smalltext" x="769" y="626">Mataró</text>
+</g>
+<!-- compass -->
+<g transform="translate(1030 105)" filter="url(#shadow)"><circle r="58" fill="#fff" stroke="#294d67" stroke-width="4"/><path d="M0-43 L12 20 0 9 -12 20Z" fill="#ed1b24"/><path d="M0 43 L12-20 0-9 -12-20Z" fill="#294d67"/><text x="-7" y="-48" class="smalltext">N</text></g>
+<!-- title / legend -->
+<rect x="42" y="42" width="315" height="92" rx="18" fill="#fff" opacity=".94" filter="url(#shadow)"/>
+<text class="title" x="65" y="78">CATALUNYA</text><text class="smalltext" x="65" y="105">Mapa offline · emergències</text>
+<g transform="translate(42 810)"><rect width="1115" height="55" rx="16" fill="#fff" opacity=".95" filter="url(#shadow)"/><line x1="22" y1="28" x2="70" y2="28" class="road"/><text class="smalltext" x="82" y="34">Carreteres principals</text><line x1="290" y1="28" x2="338" y2="28" class="river"/><text class="smalltext" x="350" y="34">Rius</text><circle cx="475" cy="28" r="9" class="city"/><text class="smalltext" x="495" y="34">Poblacions</text><text class="smalltext" x="720" y="34">Orientatiu · no substitueix cartografia oficial</text></g>
 </svg>
