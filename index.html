@@ -1,31 +1,126 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ca">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#071a35">
-  <meta name="description" content="Supervivència · Emergències — guia pràctica per estar preparat davant d'una emergència.">
-  <link rel="manifest" href="manifest.json?v=3">
-  <link rel="icon" href="icon.svg?v=3" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=3">
-  <title>Supervivència · Emergències</title>
+<meta charset="utf-8">
+<title>Preparats</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f5cf00">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Preparats">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#eceff0;--card:#fff;--ink:#141a19;--mut:#55625f;--y:#f5cf00;--red:#c9301f;--ok:#1f7a4d;--line:#d3d9da;color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--bg:#101514;--card:#1b2321;--ink:#f1f4f3;--mut:#9fb0ab;--line:#2c3836;color-scheme:dark}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.45 "Avenir Next","Segoe UI",Roboto,system-ui,sans-serif;padding-bottom:env(safe-area-inset-bottom,0)}
+header{position:sticky;top:0;z-index:5;background:var(--y);color:#141a19;display:flex;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 8px;min-height:56px}
+header h1{font-size:19px;font-weight:800;margin:0;letter-spacing:-.01em}
+#back{display:none;border:0;background:#141a19;color:var(--y);font-size:15px;font-weight:700;border-radius:999px;padding:9px 14px;min-height:40px}
+main{max-width:560px;margin:0 auto;padding:14px 14px 40px}
+button,a{font:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,label:focus-within{outline:3px solid var(--ink);outline-offset:2px}
+.sos{display:block;width:100%;text-align:left;border:0;background:var(--red);color:#fff;border-radius:18px;padding:20px 18px;font-weight:800;font-size:26px;line-height:1.15}
+.sos small{display:block;font-weight:500;font-size:15px;opacity:.92;margin-top:6px}
+.call{display:block;text-align:center;margin:10px 0 0;padding:13px;border-radius:12px;border:2px solid var(--ink);color:var(--ink);text-decoration:none;font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:14px 0}
+.lvl{display:flex;align-items:center;gap:14px;width:100%;text-align:left;color:inherit}
+.lvl b{font-size:19px}.lvl span{color:var(--mut);font-size:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:left;color:inherit;min-height:104px;display:flex;flex-direction:column;justify-content:space-between}
+.tile i{font-style:normal;font-size:28px}.tile b{font-size:16px}.tile em{font-style:normal;font-weight:800;color:var(--ok)}
+.bar{height:12px;background:var(--line);border-radius:6px;overflow:hidden}.bar div{height:100%;background:var(--ok);transition:width .25s}
+h2{font-size:20px;margin:22px 0 8px}h3{font-size:16px;margin:18px 0 6px;color:var(--mut)}
+.chk{display:flex;gap:12px;align-items:flex-start;padding:12px 4px;border-bottom:1px solid var(--line);min-height:48px}
+.chk input{width:24px;height:24px;margin:1px 0 0;accent-color:var(--ok);flex:none}
+.chk.on span{text-decoration:line-through;color:var(--mut)}
+.row{display:flex;gap:12px;align-items:center;width:100%;text-align:left;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:8px 0;font-weight:700;font-size:17px}
+.row i{font-style:normal;font-size:26px}
+ol{padding-left:0;list-style:none;counter-reset:s;margin:0}
+ol li{counter-increment:s;display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+ol li:before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;background:var(--y);color:#141a19;font-weight:800;display:grid;place-items:center;font-size:14px}
+ul.t{padding-left:20px}ul.t li{margin:6px 0}
+.alert{background:var(--y);color:#141a19;border-radius:12px;padding:12px 14px;font-weight:700;margin:12px 0}
+label.f{display:block;font-weight:700;font-size:14px;margin:12px 0 4px}
+input[type=text],input[type=tel],textarea{width:100%;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:12px;font:inherit;min-height:46px}
+textarea{min-height:84px;resize:vertical}
+.btn{border:0;border-radius:12px;padding:13px 16px;font-weight:700;background:var(--ink);color:var(--bg);min-height:46px}
+.btn.s{background:transparent;color:var(--red);border:1.5px solid var(--red);padding:8px 12px;min-height:38px;margin-top:8px}
+.mem{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}
+.note{color:var(--mut);font-size:14px;margin:8px 0}
+#inst{display:none}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
 </head>
 <body>
-  <div id="app">
-    <header class="topbar">
-      <button class="icon-btn" id="backBtn" aria-label="Enrere" hidden>‹</button>
-      <div class="brand"><img src="icon.svg?v=3" alt=""><div><strong>Supervivència</strong><span>Emergències</span></div></div>
-      <button class="icon-btn" id="installBtn" aria-label="Instal·lar" hidden>⬇</button>
-    </header>
-    <main id="main" tabindex="-1"></main>
-    <nav class="bottom-nav" aria-label="Navegació principal">
-      <button data-route="home"><span>🏠</span><small>Inici</small></button>
-      <button data-route="kit"><span>🧰</span><small>Kit</small></button>
-      <button data-route="bag"><span>🎒</span><small>Motxilla</small></button>
-      <button data-route="now"><span>🚨</span><small>Ara</small></button>
-      <button data-route="more"><span>☰</span><small>Més</small></button>
-    </nav>
-  </div>
-  <script src="app.js?v=3"></script>
+<header><button id="back" onclick="goBack()" aria-label="Enrere">← Enrere</button><h1 id="ttl">Preparats</h1></header>
+<main id="app"></main>
+<script>
+const KIT=[["Aigua i menjar",["Aigua: 3 litres per persona i dia, mínim 3 dies","Conserves i menjar que no cal cuinar","Obrellaunes manual","Menjar per a nadons o mascotes"]],
+["Llum i energia",["Llanterna amb piles de recanvi","Ràdio de piles o de maneta","Bateria externa per al mòbil","Llumins o encenedor"]],
+["Salut",["Farmaciola completa","Medicació habitual per a 7 dies","Mascaretes i guants","Termòmetre i desinfectant","Ulleres de recanvi"]],
+["Documents i diners",["Còpies de DNI, assegurança i targeta sanitària","Llista de telèfons en paper","Diners en efectiu"]],
+["Higiene",["Paper higiènic i tovalloletes","Bosses d’escombraries","Sabó i productes d’higiene personal"]],
+["Casa",["Extintor revisat","Manta ignífuga","Sé on són les claus de pas de l’aigua, el gas i la llum","Cinta americana i plàstic gruixut","Xiulet per demanar ajuda"]]];
+const BAG=[["Imprescindible",["Documents (còpies i originals si es pot)","Diners en efectiu","Mòbil, carregador i bateria externa","Claus de casa i del cotxe","Medicació per a 3 dies"]],
+["Menjar i beure",["Aigua: 1,5 litres per persona","Barretes energètiques i fruita seca"]],
+["Roba",["Muda i mitjons","Jaqueta d’abric o impermeable","Calçat resistent","Manta tèrmica"]],
+["Eines",["Llanterna frontal","Ràdio petita","Xiulet","Navalla multiús","Guants de feina"]],
+["Salut i higiene",["Farmaciola petita","Desinfectant i tovalloletes","Mascareta","Higiene bàsica"]],
+["Família",["Llista de telèfons en paper","Foto recent de cada familiar","Joc o joguina per als infants","Menjar per a la mascota"]]];
+const EM=[
+{id:"foc",i:"🔥",t:"Incendi",s:["Avisa tothom i surt de casa de pressa. No recullis res.","Si hi ha fum, avança agatat: l’aire net és a prop del terra.","Abans d’obrir una porta, toca-la amb el dors de la mà. Si és calenta, no l’obris.","No facis servir l’ascensor.","Ja a fora, truca al 112 i no tornis a entrar.","Si no pots sortir: tanca’t en una habitació, tapa les escletxes amb draps humits i fes-te veure a la finestra."],a:["Incendi forestal: si no hi ha ordre d’evacuar, confina’t en un edifici sòlid amb portes, finestres i persianes tancades.","No fugis a peu pel bosc. Segueix les indicacions de Protecció Civil."]},
+{id:"inu",i:"🌊",t:"Inundacions",s:["Puja a un pis alt i allunya’t de rius, rieres i barrancs.","No creuis mai un carrer inundat, ni a peu ni amb cotxe: pocs centímetres d’aigua poden arrossegar-te.","No baixis a garatges ni a soterranis.","Si pots fer-ho sense mullar-te, talla la llum i el gas.","Segueix els avisos d’ES-Alert i de Protecció Civil."],a:["No beguis aigua de l’aixeta fins que les autoritats ho confirmin.","Ventila i no encenguis aparells elèctrics mullats."]},
+{id:"apa",i:"🔌",t:"Apagada",s:["Fes servir llanternes. Evita les espelmes.","Desconnecta els aparells sensibles i deixa una llum encesa per saber quan torna el corrent.","Obre la nevera i el congelador el mínim possible.","Mai no facis servir generadors, fogons o brasers a l’interior: hi ha risc de monòxid de carboni.","Escolta la ràdio de piles. Posa el mòbil en estalvi d’energia.","Ajuda les persones que depenen d’aparells elèctrics i els veïns grans."],a:["Quan torni el corrent, torna a connectar els aparells d’un en un.","Llença els aliments descongelats o dubtosos."]},
+{id:"tem",i:"⛈️",t:"Tempesta",s:["Entra en un edifici o en un cotxe tancat.","Allunya’t de finestres i desconnecta els aparells elèctrics.","A l’aire lliure: lluny d’arbres sols, cims i aigua. Ajup’t amb els peus junts.","Si entre el llamp i el tro passen menys de 30 segons, busca refugi. Espera 30 minuts després de l’últim tro.","No travessis rieres ni passos inundables."],a:["Revisa danys, cables caiguts i arbres inestables. Mantén-te’n lluny i avisa el 112."]},
+{id:"ter",i:"🏚️",t:"Terratrèmol",s:["Ajup-te, cobreix-te i agafa’t sota una taula robusta o contra una paret interior.","Allunya’t de vidres, miralls i objectes que puguin caure.","No correguis cap a l’exterior ni facis servir l’ascensor.","Si ets a fora: lluny d’edificis, cables i fanals.","Si condueixes: atura’t en un lloc obert."],a:["Revisa si hi ha ferits. No moguis ningú amb lesions greus.","Si fa olor de gas: obre finestres, surt i no encenguis llums.","Calça’t. Poden venir rèpliques.","No tornis a un edifici danyat fins que ho autoritzin."]},
+{id:"qui",i:"☣️",t:"Risc químic",s:["Confina’t: entra a l’edifici més proper i tanca portes i finestres.","Atura la ventilació i l’aire condicionat.","Tapa escletxes amb draps humits i cinta.","Ves a una habitació interior, millor sense finestres.","Sintonitza la ràdio i segueix les indicacions de Protecció Civil.","No vagis a buscar els fills a l’escola: els protegeixen allà. No col·lapsis les línies de telèfon."],a:["Si t’has exposat: treu-te la roba, renta’t amb aigua i sabó i avisa el 112.","No surtis fins que anunciïn el final del confinament."]},
+{id:"eva",i:"🚗",t:"Evacuació",s:["Agafa la motxilla, els documents, la medicació, el mòbil i el carregador.","Tanca aigua, gas i llum. Tanca la porta amb clau.","Deixa una nota amb el lloc on aneu.","Segueix només els itineraris que indiquin les autoritats.","Avisa els veïns, sobretot els grans, i porta les mascotes.","Si vas amb cotxe: dipòsit ple i finestres tancades."],a:["Troba la família al punt de trobada pactat.","No tornis a casa fins que ho autoritzin."]},
+{id:"com",i:"📡",t:"Comunicacions",s:["El 112 és gratuït i funciona amb qualsevol xarxa mòbil disponible. Només per a emergències.","Envia SMS o missatges de text: ocupen menys que les trucades.","Fes trucades curtes per no saturar la xarxa.","Estalvia bateria: baixa la brillantor i activa l’estalvi d’energia.","Avisa el contacte fora de la zona que estàs bé i on ets.","Escolta la ràdio i les alertes ES-Alert."],a:["Si no hi ha xarxa, ves al punt de trobada pactat."]}];
+const TIPS=["Revisa caducitats d’aliments i medicines cada 6 mesos.","Renova l’aigua emmagatzemada cada 6 mesos.","Aprèn on són les claus de pas de l’aigua, el gas i la llum.","Pacta un punt de trobada i un contacte fora de la zona.","Descarrega els mapes de la teva zona per fer-los servir sense connexió.","Fes fotos dels documents importants i guarda-les al mòbil.","Carrega bateries i mòbils abans d’una previsió de temporal.","Fes un curs de primers auxilis i de reanimació (RCP).","Pregunta als veïns grans o vulnerables si necessiten ajuda.","Fes un simulacre amb la família un cop l’any.","Escolta alertes oficials: 112 i Protecció Civil de la Generalitat."];
+const KEY="preparats-v1";let S;try{S=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){S={}}
+S.c=S.c||{};S.f=S.f||{};S.f.m=S.f.m||[];
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s);
+const total=L=>L.reduce((n,g)=>n+g[1].length,0);
+const pct=(p,L)=>{let d=0;L.forEach((g,gi)=>g[1].forEach((_,ii)=>{if(S.c[p+gi+"."+ii])d++}));return Math.round(d/total(L)*100)};
+const planPct=()=>{const f=S.f;const v=[f.meet,f.alt,f.out,f.med,f.m.some(x=>x.n)];return Math.round(v.filter(Boolean).length/v.length*100)};
+const parts=()=>{const k=pct("k",KIT),b=pct("b",BAG),p=planPct();return{k,b,p,t:Math.round(k*.35+b*.35+p*.3)}};
+const label=t=>t<25?"Primers passos":t<50?"En camí":t<75?"Preparat":t<90?"Ben preparat":"Llest per a tot";
+const ring=t=>`<svg width="76" height="76" viewBox="0 0 76 76" aria-hidden="true"><circle cx="38" cy="38" r="31" fill="none" stroke="var(--line)" stroke-width="9"/><circle cx="38" cy="38" r="31" fill="none" stroke="var(--ok)" stroke-width="9" stroke-linecap="round" stroke-dasharray="${t*1.948} 195" transform="rotate(-90 38 38)"/><text x="38" y="44" text-anchor="middle" font-size="20" font-weight="800" fill="currentColor">${t}%</text></svg>`;
+let dip=null;
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();dip=e;const b=$("#inst");if(b)b.style.display="block"});
+function goBack(){history.length>1?history.back():(location.hash="")}
+function home(){const p=parts();return["Preparats",`<button class="sos" onclick="go('now')">🚨 Què faig ara?<small>Passos ràpids per a cada emergència</small></button><a class="call" href="tel:112">📞 Truca al 112</a>
+<button class="card lvl" onclick="go('level')">${ring(p.t)}<div><b>${label(p.t)}</b><br><span>El teu nivell de preparació</span></div></button>
+<div class="grid"><button class="tile" onclick="go('kit')"><i>🏠</i><b>Kit de casa</b><em>${p.k}%</em></button><button class="tile" onclick="go('bag')"><i>🎒</i><b>Motxilla</b><em>${p.b}%</em></button><button class="tile" onclick="go('family')"><i>👨‍👩‍👧</i><b>Pla familiar</b><em>${p.p}%</em></button><button class="tile" onclick="go('tips')"><i>💡</i><b>Consells</b><span class="note">${TIPS.length} idees</span></button></div>
+<button class="btn" id="inst" onclick="inst()">⬇️ Instal·la l’app</button><p class="note">Funciona sense connexió. Les dades es queden només en aquest dispositiu. A l’iPhone: Compartir → Afegeix a la pantalla d’inici.</p>`]}
+async function inst(){if(dip){dip.prompt();dip=null;$("#inst").style.display="none"}}
+function list(p,t,L){const v=pct(p,L);return[t,`<div class="card"><b>${v}% preparat</b><div class="bar" style="margin-top:8px"><div style="width:${v}%"></div></div></div>`+L.map((g,gi)=>`<h3>${g[0]}</h3>`+g[1].map((x,ii)=>{const k=p+gi+"."+ii,on=S.c[k];return`<label class="chk${on?" on":""}"><input type="checkbox" ${on?"checked":""} onchange="tg('${k}')"><span>${x}</span></label>`}).join("")).join("")+`<button class="btn s" onclick="rs('${p}')">Esborra les marques</button>`]}
+function tg(k){S.c[k]?delete S.c[k]:S.c[k]=1;save();render(true)}
+function rs(p){if(confirm("Vols esborrar totes les marques d’aquesta llista?")){Object.keys(S.c).forEach(k=>{if(k[0]==p[0])delete S.c[k]});save();render(true)}}
+function now(){return["Què faig ara?",`<div class="alert">Perill de vida? Truca ara al 112.</div>`+EM.map(e=>`<button class="row" onclick="go('now/${e.id}')"><i>${e.i}</i>${e.t}</button>`).join("")]}
+function em(id){const e=EM.find(x=>x.id==id);if(!e)return now();return[e.t,`<div class="alert">Mantén la calma. Truca al 112 si hi ha perill.</div><h2>${e.i} Ara</h2><ol>${e.s.map(x=>`<li>${x}</li>`).join("")}</ol><h2>Després</h2><ul class="t">${e.a.map(x=>`<li>${x}</li>`).join("")}</ul>`]}
+function tips(){return["Consells",`<ul class="t">${TIPS.map(x=>`<li>${x}</li>`).join("")}</ul>`]}
+function fam(){const f=S.f;const fl=(k,l,ph)=>`<label class="f" for="${k}">${l}</label><input type="text" id="${k}" value="${esc(f[k])}" placeholder="${ph}" oninput="sf('${k}',this.value)">`;
+return["Pla familiar",`<p class="note">Es guarda només en aquest dispositiu.</p>`+fl("meet","Punt de trobada (a prop de casa)","Ex.: plaça del barri")+fl("alt","Punt de trobada alternatiu (fora del barri)","Ex.: casa dels avis")+fl("out","Contacte fora de la zona (nom i telèfon)","Nom i telèfon")+`<label class="f" for="med">Informació mèdica important</label><textarea id="med" placeholder="Al·lèrgies, medicació, grup sanguini…" oninput="sf('med',this.value)">${esc(f.med)}</textarea><h2>Membres</h2>`+f.m.map((m,i)=>`<div class="mem"><input type="text" placeholder="Nom" value="${esc(m.n)}" oninput="sm(${i},'n',this.value)" aria-label="Nom"><input type="tel" placeholder="Telèfon" value="${esc(m.t)}" oninput="sm(${i},'t',this.value)" aria-label="Telèfon" style="margin-top:8px"><input type="text" placeholder="Notes (edat, salut, escola…)" value="${esc(m.x)}" oninput="sm(${i},'x',this.value)" aria-label="Notes" style="margin-top:8px"><button class="btn s" onclick="dm(${i})">Elimina</button></div>`).join("")+`<button class="btn" onclick="am()">+ Afegeix un membre</button>`]}
+const sf=(k,v)=>{S.f[k]=v;save()},sm=(i,k,v)=>{S.f.m[i][k]=v;save()};
+function am(){S.f.m.push({n:"",t:"",x:""});save();render(true)}
+function dm(i){S.f.m.splice(i,1);save();render(true)}
+function lvl(){const p=parts();const w=[["Kit de casa",p.k,"kit"],["Motxilla",p.b,"bag"],["Pla familiar",p.p,"family"]].sort((a,b)=>a[1]-b[1])[0];
+return["Nivell de preparació",`<div class="card" style="text-align:center"><div style="display:inline-block;transform:scale(1.6);margin:26px 0">${ring(p.t)}</div><h2 style="margin:6px 0">${label(p.t)}</h2></div>`+[["🏠 Kit de casa",p.k],["🎒 Motxilla",p.b],["👨‍👩‍👧 Pla familiar",p.p]].map(x=>`<div class="card"><b>${x[0]}</b> · ${x[1]}%<div class="bar" style="margin-top:8px"><div style="width:${x[1]}%"></div></div></div>`).join("")+(p.t<100?`<button class="btn" style="width:100%" onclick="go('${w[2]}')">Millora: ${w[0]}</button>`:"")]}
+function go(h){location.hash=h}
+function render(keep){const h=location.hash.slice(1),[a,b]=h.split("/");const y=scrollY;
+const r=a=="kit"?list("k","Kit de casa",KIT):a=="bag"?list("b","Motxilla d’emergència",BAG):a=="now"?(b?em(b):now()):a=="tips"?tips():a=="family"?fam():a=="level"?lvl():home();
+$("#ttl").textContent=r[0];$("#app").innerHTML=r[1];$("#back").style.display=h?"block":"none";document.title=r[0]=="Preparats"?"Preparats":r[0]+" · Preparats";
+if(dip&&$("#inst"))$("#inst").style.display="block";scrollTo(0,keep===true?y:0)}
+addEventListener("hashchange",()=>render());
+render();
+if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+</script>
 </body>
 </html>
