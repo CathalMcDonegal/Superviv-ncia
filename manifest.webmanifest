@@ -4,20 +4,17 @@
   "description": "Guia pràctica per preparar-te davant d'una emergència.",
   "lang": "ca",
   "id": "./",
-  "start_url": "./?v=5",
+  "start_url": "./?app=v6",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone"],
-  "background_color": "#f3f7fb",
+  "display_override": ["standalone"],
+  "background_color": "#071a35",
   "theme_color": "#071a35",
   "orientation": "portrait-primary",
+  "prefer_related_applications": false,
   "icons": [
-    {"src": "icon-192.png?v=5", "sizes": "192x192", "type": "image/png", "purpose": "any"},
-    {"src": "icon-512.png?v=5", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
-  ],
-  "shortcuts": [
-    {"name":"Què faig ara?","short_name":"Emergència","url":"./?v=5#now","icons":[{"src":"icon-192.png?v=5","sizes":"192x192","type":"image/png"}]},
-    {"name":"Kit de casa","short_name":"Kit","url":"./?v=5#kit","icons":[{"src":"icon-192.png?v=5","sizes":"192x192","type":"image/png"}]},
-    {"name":"Motxilla","short_name":"Motxilla","url":"./?v=5#bag","icons":[{"src":"icon-192.png?v=5","sizes":"192x192","type":"image/png"}]}
+    {"src":"icon.svg?v=6","sizes":"512x512","type":"image/svg+xml","purpose":"any"},
+    {"src":"icon-192.png?v=6","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"icon-512.png?v=6","sizes":"512x512","type":"image/png","purpose":"any"}
   ]
 }
