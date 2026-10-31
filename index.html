@@ -8,18 +8,18 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Supervivència">
-<link rel="manifest" href="manifest.json?v=7">
-<link rel="icon" href="icon.svg?v=7" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon-192.png?v=7">
-<link rel="stylesheet" href="styles.css?v=7">
+<link rel="manifest" href="manifest.json?v=8">
+<link rel="icon" href="icon.svg?v=8" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png?v=8">
+<link rel="stylesheet" href="styles.css?v=8">
 <title>Supervivència · Emergències</title>
 </head>
 <body>
 <div id="app">
 <header class="topbar">
 <button class="icon-btn" id="backBtn" aria-label="Enrere" hidden>‹</button>
-<div class="brand"><img src="icon.svg?v=7" alt=""><div><strong>Supervivència</strong><span>Emergències</span></div></div>
-<button class="icon-btn" id="installBtn" aria-label="Instal·lar" hidden>⬇</button>
+<div class="brand"><img src="icon.svg?v=8" alt=""><div><strong>Supervivència</strong><span>Emergències</span></div></div>
+<button class="icon-btn" id="installBtn" aria-label="Instal·lar app" title="Instal·lar app">⬇</button>
 </header>
 <main id="main" tabindex="-1"></main>
 <nav class="bottom-nav" aria-label="Navegació principal">
@@ -30,7 +30,7 @@
 <button data-route="more"><span>☰</span><small>Més</small></button>
 </nav>
 </div>
-<script src="app.js?v=7"></script>
+<script src="app.js?v=8"></script>
 <script>
 (function(){
  const b=document.getElementById('backBtn');
@@ -38,8 +38,33 @@
  document.querySelectorAll('[data-route]').forEach(x=>x.addEventListener('click',()=>{location.hash=x.dataset.route==='home'?'':x.dataset.route}));
  function active(){const r=location.hash.replace('#','').split('/')[0]||'home';document.querySelectorAll('[data-route]').forEach(x=>x.classList.toggle('active',x.dataset.route===r));if(b)b.hidden=!location.hash;}
  addEventListener('hashchange',active);active();
+
+ let deferredPrompt=null;
+ const installBtn=document.getElementById('installBtn');
+ const isStandalone=window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+ if(isStandalone && installBtn) installBtn.hidden=true;
+ addEventListener('beforeinstallprompt',e=>{
+   e.preventDefault();
+   deferredPrompt=e;
+   if(installBtn) installBtn.hidden=false;
+ });
+ if(installBtn) installBtn.addEventListener('click',async()=>{
+   if(deferredPrompt){
+     deferredPrompt.prompt();
+     try{await deferredPrompt.userChoice;}catch(_){ }
+     deferredPrompt=null;
+     installBtn.hidden=true;
+   }else if(!isStandalone){
+     alert('Per instal·lar-la a Android: obre el menú ⋮ de Chrome i tria «Instal·la l’aplicació» o «Afegeix a la pantalla d’inici».');
+   }
+ });
+ addEventListener('appinstalled',()=>{deferredPrompt=null;if(installBtn)installBtn.hidden=true;});
+
+ if('serviceWorker' in navigator){
+   addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=8').catch(()=>{}));
+ }
 })();
 </script>
-<script src="features.js?v=1"></script>
+<script src="features.js?v=2"></script>
 </body>
 </html>
