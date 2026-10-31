@@ -1,6 +1,6 @@
 (() => {
-  const MAP_URL = 'mapa-offline.svg?v=2';
   const FOOD_KEY = 'supervivencia-food-v1';
+  const OSM_TILE = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
   const RADIO = [
     ['HF','7.110 MHz','Centre d’activitat d’emergències IARU Regió 1','Veu · SSB','🇪🇺'],
     ['HF','3.760 MHz','Centre d’activitat d’emergències IARU Regió 1','Veu · SSB','🇪🇺'],
@@ -22,100 +22,38 @@
   function saveFood(data) { localStorage.setItem(FOOD_KEY, JSON.stringify(data)); }
   function foodMenu(type) {
     const saved = loadFood();
-    return `<div class="food-submenu" data-food-menu="${type}">
-      <div class="food-title">🥫 Exemples de menjar per tenir preparat</div>
-      <div class="food-grid">${FOOD.map(([id, icon, name]) => {
-        const key = `${type}-${id}`;
-        return `<label class="food-option ${saved[key] ? 'done' : ''}"><input type="checkbox" data-food-item="${id}" data-food-type="${type}" ${saved[key] ? 'checked' : ''}><span>${icon}</span><span>${name}</span></label>`;
-      }).join('')}</div>
-      <p>Selecciona també els aliments que ja tens preparats. Les seleccions es guarden al dispositiu.</p>
-    </div>`;
+    return `<div class="food-submenu" data-food-menu="${type}"><div class="food-title">🥫 Exemples de menjar per tenir preparat</div><div class="food-grid">${FOOD.map(([id, icon, name]) => { const key = `${type}-${id}`; return `<label class="food-option ${saved[key] ? 'done' : ''}"><input type="checkbox" data-food-item="${id}" data-food-type="${type}" ${saved[key] ? 'checked' : ''}><span>${icon}</span><span>${name}</span></label>`; }).join('')}</div><p>Selecciona també els aliments que ja tens preparats. Les seleccions es guarden al dispositiu.</p></div>`;
   }
-  function syncFoodVisibility(input) {
-    const menu = input.closest('.check')?.nextElementSibling;
-    if (!menu?.classList.contains('food-submenu')) return;
-    menu.hidden = input.checked;
-  }
-  function addFoodMenus() {
-    document.querySelectorAll('input[data-id="food"]').forEach(input => {
-      const label = input.closest('.check');
-      if (!label) return;
-      const type = input.dataset.type || 'kit';
-      if (!label.nextElementSibling?.classList.contains('food-submenu')) label.insertAdjacentHTML('afterend', foodMenu(type));
-      syncFoodVisibility(input);
-    });
-  }
+  function syncFoodVisibility(input) { const menu = input.closest('.check')?.nextElementSibling; if (!menu?.classList.contains('food-submenu')) return; menu.hidden = input.checked; }
+  function addFoodMenus() { document.querySelectorAll('input[data-id="food"]').forEach(input => { const label = input.closest('.check'); if (!label) return; const type = input.dataset.type || 'kit'; if (!label.nextElementSibling?.classList.contains('food-submenu')) label.insertAdjacentHTML('afterend', foodMenu(type)); syncFoodVisibility(input); }); }
   function toolCards() {
-    return `<article class="card tile feature-tile" data-feature="map"><span class="emoji">🗺️</span><div><h3>Mapa offline</h3><p>Carreteres, rius i poblacions, sense connexió.</p></div></article>
-      <article class="card tile feature-tile" data-feature="radio"><span class="emoji">📡</span><div><h3>Freqüències d’emergència</h3><p>HF · VHF · UHF per comunicacions d’emergència.</p></div></article>`;
+    return `<article class="card tile feature-tile" data-feature="map"><span class="emoji">🗺️</span><div><h3>Mapa real</h3><p>Mapa de carrers i carreteres amb OpenStreetMap.</p></div></article><article class="card tile feature-tile" data-feature="radio"><span class="emoji">📡</span><div><h3>Freqüències d’emergència</h3><p>HF · VHF · UHF per comunicacions d’emergència.</p></div></article>`;
   }
-  function addTools() {
-    document.querySelectorAll('.feature-tools').forEach(x => x.remove());
-    const pages = document.querySelectorAll('.page');
-    if (!pages.length) return;
-    const page = pages[0];
-    const box = document.createElement('div');
-    box.className = 'feature-tools';
-    box.innerHTML = `<div class="section-title"><h2>🧭 Eines d’emergència</h2></div><div class="grid">${toolCards()}</div>`;
-    page.appendChild(box);
-  }
+  function addTools() { document.querySelectorAll('.feature-tools').forEach(x => x.remove()); const pages = document.querySelectorAll('.page'); if (!pages.length) return; const page = pages[0]; const box = document.createElement('div'); box.className = 'feature-tools'; box.innerHTML = `<div class="section-title"><h2>🧭 Eines d’emergència</h2></div><div class="grid">${toolCards()}</div>`; page.appendChild(box); }
+  const mapState = { lat: 41.75, lon: 1.75, zoom: 8, poi: true };
+  function deg2num(lat, lon, z) { const n = 2 ** z; const x = (lon + 180) / 360 * n; const latRad = lat * Math.PI / 180; const y = (1 - Math.asinh(Math.tan(latRad)) / Math.PI) / 2 * n; return {x,y}; }
+  function num2deg(x,y,z) { const n=2**z; const lon=x/n*360-180; const latRad=Math.atan(Math.sinh(Math.PI*(1-2*y/n))); return {lat:latRad*180/Math.PI,lon}; }
+  function tileHtml(x,y,z,cls='') { const n=2**z; const xx=((x%n)+n)%n; if(y<0||y>=n)return ''; return `<img class="osm-tile ${cls}" draggable="false" src="${OSM_TILE.replace('{z}',z).replace('{x}',xx).replace('{y}',y)}" alt="">`; }
   function mapPage() {
-    return `<div class="page feature-page"><button class="back-link" data-feature-back>‹ Tornar</button><section class="hero"><div class="hero-kicker">🗺️ SENSE CONNEXIÓ</div><h1>Mapa d’emergència</h1><p>Mapa esquemàtic de Catalunya incorporat a l’app. Funciona sense internet i es pot ampliar, reduir i desplaçar.</p></section><div class="map-card"><div class="map-toolbar"><button class="map-layer active" data-layer="roads">🛣️ Carreteres</button><button class="map-layer active" data-layer="rivers">💧 Rius</button><button class="map-layer active" data-layer="cities">📍 Poblacions</button><button class="map-reset" data-zoom="reset">⟳ Centrar</button></div><div class="map-controls"><button data-zoom="in" aria-label="Ampliar">＋</button><button data-zoom="out" aria-label="Reduir">−</button></div><div class="map-viewport" id="mapViewport"><img id="offlineMap" src="${MAP_URL}" alt="Mapa offline d’emergència de Catalunya"></div></div><div class="map-legend"><strong>💡 Com utilitzar-lo</strong><span>Arrossega el mapa amb el dit · + / − per al zoom · toca les capes per mostrar-les o ocultar-les.</span></div><div class="info"><strong>ℹ️ Important</strong><p>És un mapa orientatiu per a situacions d’emergència. No substitueix una cartografia oficial ni indica en temps real carreteres tallades, refugis o serveis disponibles.</p></div></div>`;
+    return `<div class="page feature-page"><button class="back-link" data-feature-back>‹ Tornar</button><section class="hero"><div class="hero-kicker">🗺️ MAPA REAL</div><h1>Mapa d’emergència</h1><p>Mapa real de carrers, carreteres i poblacions. Pots ampliar, reduir, arrossegar-lo i situar-te amb el GPS.</p></section><div class="map-card real-map-card"><div class="map-toolbar"><button class="map-action" data-map-action="locate">📍 La meva ubicació</button><button class="map-action" data-map-action="poi">🚨 Serveis d’emergència</button><button class="map-reset" data-map-action="reset">⟳ Centrar</button></div><div class="map-controls"><button data-map-action="in" aria-label="Ampliar">＋</button><button data-map-action="out" aria-label="Reduir">−</button></div><div class="map-viewport real-map" id="mapViewport"><div class="map-canvas" id="mapCanvas"></div><div class="map-loading" id="mapLoading">Carregant mapa…</div><div class="map-location" id="mapLocation" hidden>📍</div><div class="map-pois" id="mapPois"></div></div></div><div class="map-attribution">© OpenStreetMap contributors</div><div class="map-legend"><strong>🚨 Segona capa</strong><span>Activa «Serveis d’emergència» per mostrar hospitals, bombers, policia, benzineres i punts d’aigua de la zona visible.</span></div><div class="info"><strong>ℹ️ Connexió</strong><p>El mapa real necessita internet per carregar la cartografia. La resta de l’app continua funcionant sense connexió.</p></div></div>`;
   }
-  function radioPage() {
-    return `<div class="page feature-page"><button class="back-link" data-feature-back>‹ Tornar</button><section class="hero hero-radio"><div class="hero-kicker">📡 RADIOCOMUNICACIONS</div><h1>Freqüències d’emergència</h1><p>Freqüències de referència per radioaficionats. Escolta abans de transmetre i prioritza sempre el trànsit d’emergència.</p></section><div class="radio-note">⚠️ Les freqüències són centres d’activitat, no canals exclusius d’emergència. Pot haver-hi QRM i ús local.</div><div class="freq-list">${RADIO.map(r=>`<div class="freq-card"><div class="freq-top"><span>${r[4]} ${r[0]}</span><strong>${r[1]}</strong></div><p>${r[2]}</p><small>${r[3]}</small></div>`).join('')}</div><div class="info"><strong>📻 Regla ràpida</strong><p>En cas d’emergència, mantén l’escolta, deixa lliure la freqüència quan hi hagi trànsit prioritari i segueix les instruccions dels coordinadors.</p></div></div>`;
+  function renderTiles() {
+    const vp=document.getElementById('mapViewport'), canvas=document.getElementById('mapCanvas'), loading=document.getElementById('mapLoading'); if(!vp||!canvas)return;
+    const z=mapState.zoom, center=deg2num(mapState.lat,mapState.lon,z), size=256, cols=Math.ceil(vp.clientWidth/size)+2, rows=Math.ceil(vp.clientHeight/size)+2;
+    const startX=Math.floor(center.x-cols/2), startY=Math.floor(center.y-rows/2), offsetX=vp.clientWidth/2-(center.x-startX)*size, offsetY=vp.clientHeight/2-(center.y-startY)*size;
+    canvas.innerHTML=''; canvas.style.width=`${cols*size}px`; canvas.style.height=`${rows*size}px`; canvas.style.transform=`translate(${offsetX}px,${offsetY}px)`;
+    for(let y=0;y<rows;y++) for(let x=0;x<cols;x++){ const node=document.createElement('div'); node.className='osm-tile-wrap'; node.style.left=`${x*size}px`; node.style.top=`${y*size}px`; node.innerHTML=tileHtml(startX+x,startY+y,z); canvas.appendChild(node); }
+    loading.hidden=false; let count=0; canvas.querySelectorAll('img').forEach(im=>{im.onload=()=>{count++;if(count>=Math.min(3,canvas.querySelectorAll('img').length))loading.hidden=true};im.onerror=()=>{count++;if(count>=Math.min(3,canvas.querySelectorAll('img').length))loading.hidden=true};});
+    if(mapState.poi) loadPOIs();
   }
-  function renderFeature() {
-    const route = location.hash.replace('#','');
-    const main = document.querySelector('#main');
-    if (!main) return false;
-    if (route === 'map') { main.innerHTML = mapPage(); bindMap(); return true; }
-    if (route === 'radio') { main.innerHTML = radioPage(); return true; }
-    return false;
-  }
-  function bindMap() {
-    let scale = 1;
-    const img = document.getElementById('offlineMap');
-    const vp = document.getElementById('mapViewport');
-    if (!img || !vp) return;
-    const apply = () => { img.style.transform = `scale(${scale})`; };
-    document.querySelectorAll('[data-zoom]').forEach(b => b.addEventListener('click', () => {
-      const z = b.dataset.zoom;
-      if (z === 'in') scale = Math.min(3.5, scale + .25);
-      if (z === 'out') scale = Math.max(.75, scale - .25);
-      if (z === 'reset') { scale = 1; vp.scrollLeft = 0; vp.scrollTop = 0; }
-      apply();
-    }));
-    document.querySelectorAll('.map-layer').forEach(button => button.addEventListener('click', () => {
-      const layer = document.getElementById(button.dataset.layer);
-      if (!layer) return;
-      const active = button.classList.toggle('active');
-      layer.style.display = active ? '' : 'none';
-    }));
-    let sx=0, sy=0, ox=0, oy=0, dragging=false;
-    vp.addEventListener('pointerdown',e=>{dragging=true;sx=e.clientX;sy=e.clientY;ox=vp.scrollLeft;oy=vp.scrollTop;vp.setPointerCapture(e.pointerId)});
-    vp.addEventListener('pointermove',e=>{if(!dragging)return;vp.scrollLeft=ox-(e.clientX-sx);vp.scrollTop=oy-(e.clientY-sy)});
-    vp.addEventListener('pointerup',()=>dragging=false);
-    vp.addEventListener('pointercancel',()=>dragging=false);
-  }
-  document.addEventListener('change', e => {
-    const input = e.target;
-    if (input.matches('input[data-id="food"]')) { syncFoodVisibility(input); return; }
-    if (input.matches('input[data-food-item]')) {
-      const saved = loadFood();
-      const key = `${input.dataset.foodType || 'kit'}-${input.dataset.foodItem}`;
-      saved[key] = input.checked;
-      saveFood(saved);
-      input.closest('.food-option')?.classList.toggle('done', input.checked);
-    }
-  });
-  function decorate() { addFoodMenus(); if (!renderFeature()) addTools(); }
-  document.addEventListener('click', e => {
-    const feature = e.target.closest('[data-feature]');
-    if (feature) { location.hash = feature.dataset.feature; return; }
-    if (e.target.closest('[data-feature-back]')) { location.hash = '#home'; return; }
-  });
-  addEventListener('hashchange', () => setTimeout(decorate, 0));
-  addEventListener('load', () => setTimeout(decorate, 0));
-  setTimeout(decorate, 50);
+  function mapMove(dx,dy){ const z=mapState.zoom,c=deg2num(mapState.lat,mapState.lon,z); const next=num2deg(c.x-dx/256,c.y-dy/256,z); mapState.lat=Math.max(-85,Math.min(85,next.lat)); mapState.lon=next.lon; renderTiles(); }
+  function locate(){ if(!navigator.geolocation){alert('Aquest dispositiu no permet obtenir la ubicació.');return;} const loading=document.getElementById('mapLoading'); if(loading){loading.textContent='Obtenint ubicació…';loading.hidden=false;} navigator.geolocation.getCurrentPosition(p=>{mapState.lat=p.coords.latitude;mapState.lon=p.coords.longitude;mapState.zoom=Math.max(mapState.zoom,14); const marker=document.getElementById('mapLocation'); if(marker){marker.hidden=false;marker.style.left='50%';marker.style.top='50%';} renderTiles();},()=>alert('No s’ha pogut obtenir la ubicació. Revisa el permís de localització.'),{enableHighAccuracy:true,timeout:10000,maximumAge:60000}); }
+  async function loadPOIs(){ const box=document.getElementById('mapPois'); if(!box)return; box.innerHTML='<div class="poi-status">Carregant serveis…</div>'; const z=mapState.zoom,c=deg2num(mapState.lat,mapState.lon,z), span=Math.min(0.5,120/2**z); const s=Math.max(-85,mapState.lat-span),n=Math.min(85,mapState.lat+span),w=mapState.lon-span,e=mapState.lon+span; const q=`[out:json][timeout:10];(node[amenity=hospital](${s},${w},${n},${e});node[amenity=police](${s},${w},${n},${e});node[amenity=fire_station](${s},${w},${n},${e});node[amenity=fuel](${s},${w},${n},${e});node[amenity=drinking_water](${s},${w},${n},${e}););out center;`; try{const r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'data='+encodeURIComponent(q)}); if(!r.ok)throw new Error('HTTP '+r.status); const data=await r.json(); box.innerHTML=''; const icons={hospital:'🏥',police:'👮',fire_station:'🚒',fuel:'⛽',drinking_water:'💧'}; data.elements.slice(0,80).forEach(p=>{const lat=p.lat??p.center?.lat,lon=p.lon??p.center?.lon;if(lat==null||lon==null)return; const pos=deg2num(lat,lon,z), left=50+(pos.x-c.x)*256/document.getElementById('mapViewport').clientWidth*100, top=50+(pos.y-c.y)*256/document.getElementById('mapViewport').clientHeight*100; const m=document.createElement('button');m.className='poi-marker';m.style.left=left+'%';m.style.top=top+'%';m.title=p.tags?.name||'Servei d’emergència';m.textContent=icons[p.tags?.amenity]||'🚨';box.appendChild(m);}); }catch(e){box.innerHTML='<div class="poi-status">No s’han pogut carregar els serveis ara mateix.</div>';}}
+  function bindMap(){ const vp=document.getElementById('mapViewport'); if(!vp)return; renderTiles(); let sx=0,sy=0,drag=false,lastX=0,lastY=0; vp.addEventListener('pointerdown',e=>{drag=true;sx=e.clientX;sy=e.clientY;lastX=sx;lastY=sy;vp.setPointerCapture(e.pointerId)}); vp.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;mapMove(dx,dy)}); vp.addEventListener('pointerup',()=>drag=false);vp.addEventListener('pointercancel',()=>drag=false); document.querySelectorAll('[data-map-action]').forEach(b=>b.addEventListener('click',()=>{const a=b.dataset.mapAction;if(a==='in')mapState.zoom=Math.min(18,mapState.zoom+1);if(a==='out')mapState.zoom=Math.max(3,mapState.zoom-1);if(a==='reset'){mapState.lat=41.75;mapState.lon=1.75;mapState.zoom=8;}if(a==='locate')return locate();if(a==='poi'){mapState.poi=!mapState.poi;b.classList.toggle('active',mapState.poi);if(mapState.poi)loadPOIs();else document.getElementById('mapPois').innerHTML='';return;}renderTiles();})); window.addEventListener('resize',renderTiles,{once:true}); }
+  function radioPage(){ return `<div class="page feature-page"><button class="back-link" data-feature-back>‹ Tornar</button><section class="hero hero-radio"><div class="hero-kicker">📡 RADIOCOMUNICACIONS</div><h1>Freqüències d’emergència</h1><p>Freqüències de referència per radioaficionats. Escolta abans de transmetre i prioritza sempre el trànsit d’emergència.</p></section><div class="radio-note">⚠️ Les freqüències són centres d’activitat, no canals exclusius d’emergència. Pot haver-hi QRM i ús local.</div><div class="freq-list">${RADIO.map(r=>`<div class="freq-card"><div class="freq-top"><span>${r[4]} ${r[0]}</span><strong>${r[1]}</strong></div><p>${r[2]}</p><small>${r[3]}</small></div>`).join('')}</div><div class="info"><strong>📻 Regla ràpida</strong><p>En cas d’emergència, mantén l’escolta, deixa lliure la freqüència quan hi hagi trànsit prioritari i segueix les instruccions dels coordinadors.</p></div></div>`; }
+  function renderFeature(){ const route=location.hash.replace('#',''); const main=document.querySelector('#main'); if(!main)return false; if(route==='map'){main.innerHTML=mapPage();bindMap();return true;} if(route==='radio'){main.innerHTML=radioPage();return true;}return false; }
+  document.addEventListener('change',e=>{const input=e.target;if(input.matches('input[data-id="food"]')){syncFoodVisibility(input);return;}if(input.matches('input[data-food-item]')){const saved=loadFood();const key=`${input.dataset.foodType||'kit'}-${input.dataset.foodItem}`;saved[key]=input.checked;saveFood(saved);input.closest('.food-option')?.classList.toggle('done',input.checked);}});
+  function decorate(){addFoodMenus();if(!renderFeature())addTools();}
+  document.addEventListener('click',e=>{const feature=e.target.closest('[data-feature]');if(feature){location.hash=feature.dataset.feature;return;}if(e.target.closest('[data-feature-back]')){location.hash='#home';return;}});
+  addEventListener('hashchange',()=>setTimeout(decorate,0));addEventListener('load',()=>setTimeout(decorate,0));setTimeout(decorate,50);
 })();
