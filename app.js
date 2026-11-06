@@ -142,6 +142,48 @@ function morePage() {
   return `<div class="page"><section class="hero"><h1>☰ Més</h1><p>Opcions i informació de l’app.</p></section><div class="grid"><article class="card tile" data-go="tips"><span class="emoji">💡</span><div><h3>Tips</h3><p>Consells ràpids</p></div></article><article class="card tile" data-go="family"><span class="emoji">👨‍👩‍👧</span><div><h3>Pla familiar</h3><p>Informació important</p></div></article><article class="card tile" data-about><span class="emoji">ℹ️</span><div><h3>Sobre l’app</h3><p>Supervivència · Emergències</p></div></article></div></div>`;
 }
 
+
+const PHONE_CONTACTS_KEY = 'supervivencia-phone-contacts-v1';
+const PHONE_CONTACTS = [
+  ['🚨','Emergències (112)','112','Policia, bombers, ambulàncies i rescats. Només per a emergències reals.','Catalunya'],
+  ['🩺','Salut Respon','061','Consultes sanitàries no urgents a Catalunya.','Catalunya'],
+  ['🏛️','Generalitat · informació','012','Informació i tràmits de la Generalitat.','Catalunya'],
+  ['🛟','Atenció a les dones','900 900 120','Atenció gratuïta i confidencial, 24 hores.','Catalunya'],
+  ['🧒','Infància Respon','116 111','Ajuda davant situacions de risc per a infants i adolescents.','Catalunya'],
+  ['🚨','Emergències generals','112','Número únic d’emergències.','Espanya'],
+  ['👮','Policia Nacional','091','Atenció policial.','Espanya'],
+  ['🛡️','Guàrdia Civil','062','Atenció de la Guàrdia Civil.','Espanya'],
+  ['🟣','Atenció violència de gènere','016','Atenció gratuïta. En cas de perill immediat, truca al 112.','Espanya'],
+  ['💚','Atenció conducta suïcida','024','Línia d’ajuda en situacions de crisi emocional o risc suïcida.','Espanya'],
+  ['🇪🇺','Emergències a la Unió Europea','112','Número europeu d’emergències.','Europa']
+];
+function phonePage() {
+  return `<div class="page"><button class="back-link" data-back>‹ Tornar</button>
+    <section class="hero hero-phone"><div class="hero-kicker">☎️ CONTACTES ESSENCIALS</div><h1>Guia telefònica</h1><p>Telèfons útils per a emergències, salut i assistència.</p><a class="phone-call-main" href="tel:112">📞 TRUCAR AL 112</a></section>
+    <div class="phone-warning">⚠️ El 112 és només per a emergències reals. Per a consultes sanitàries no vitals a Catalunya, utilitza el 061.</div>
+    <input class="phone-search" id="phoneSearch" type="search" placeholder="🔎 Cerca servei o número…" autocomplete="off">
+    <div class="phone-tabs">${['Catalunya','Espanya','Europa','Personals'].map((x,i)=>`<button type="button" class="phone-tab ${i===0?'active':''}" data-phone-area="${x}">${['🏴','🇪🇸','🇪🇺','👥'][i]} ${x}</button>`).join('')}</div>
+    <div id="phoneList"></div>
+    <section class="phone-personal"><h2>➕ Afegir contacte personal</h2><form id="phoneForm" class="form"><div class="field"><label>Nom o servei</label><input name="name" required placeholder="Ex. Assegurança de la llar"></div><div class="field"><label>Telèfon</label><input name="number" type="tel" required placeholder="Ex. +34 600 000 000"></div><div class="field"><label>Categoria</label><input name="group" placeholder="Ex. Família, assegurança, veïns"></div><button class="btn blue" type="submit">💾 Guardar contacte</button></form></section>
+  </div>`;
+}
+function bindPhonePage() {
+  let area='Catalunya';
+  const read=()=>{try{return JSON.parse(localStorage.getItem(PHONE_CONTACTS_KEY)||'[]')}catch(_){return []}};
+  const renderList=()=>{
+    const q=(document.getElementById('phoneSearch')?.value||'').toLocaleLowerCase('ca').trim();
+    const rows=area==='Personals'?read().map((x,i)=>({icon:'👤',name:x.name,number:x.number,note:x.note||x.group||'Contacte personal',id:i})):PHONE_CONTACTS.filter(x=>x[4]===area).map(x=>({icon:x[0],name:x[1],number:x[2],note:x[3]}));
+    const filtered=rows.filter(x=>!q||[x.name,x.number,x.note].join(' ').toLocaleLowerCase('ca').includes(q));
+    const list=document.getElementById('phoneList'); if(!list)return;
+    list.innerHTML=filtered.length?filtered.map(x=>`<article class="phone-card ${x.number==='112'?'phone-urgent':''}"><div class="phone-card-top"><span class="phone-icon">${x.icon}</span><div class="phone-copy"><strong>${escapeHtml(x.name)}</strong><small>${escapeHtml(x.note)}</small></div><a class="phone-number" href="tel:${String(x.number).replace(/[^+0-9]/g,'')}">${escapeHtml(x.number)}</a></div>${area==='Personals'?'<button type="button" class="phone-delete" data-phone-delete="'+x.id+'">Eliminar contacte</button>':''}</article>`).join(''):'<div class="info">No hi ha contactes que coincideixin amb la cerca.</div>';
+    list.querySelectorAll('[data-phone-delete]').forEach(b=>b.addEventListener('click',()=>{const c=read();c.splice(Number(b.dataset.phoneDelete),1);localStorage.setItem(PHONE_CONTACTS_KEY,JSON.stringify(c));renderList()}));
+  };
+  document.querySelectorAll('[data-phone-area]').forEach(b=>b.addEventListener('click',()=>{area=b.dataset.phoneArea;document.querySelectorAll('[data-phone-area]').forEach(x=>x.classList.toggle('active',x===b));renderList()}));
+  document.getElementById('phoneSearch')?.addEventListener('input',renderList);
+  document.getElementById('phoneForm')?.addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const c=read();c.push({name:fd.get('name'),number:fd.get('number'),group:fd.get('group')||'Personal'});localStorage.setItem(PHONE_CONTACTS_KEY,JSON.stringify(c));e.currentTarget.reset();area='Personals';document.querySelectorAll('[data-phone-area]').forEach(x=>x.classList.toggle('active',x.dataset.phoneArea===area));renderList();});
+  renderList();
+}
+
 function render() {
   const main = document.querySelector('#main');
   if (!main) return;
@@ -154,21 +196,12 @@ function render() {
   else if (route === 'family') html = familyPage();
   else if (route === 'more') html = morePage();
   else if (route === 'level') html = levelPage();
-  else if (route === 'map' || route === 'radio' || route === 'phone') html = '';
+  else if (route === 'phone') html = phonePage();
+  else if (route === 'map' || route === 'radio') html = '';
   else if (route.startsWith('emergency-')) html = emergencyPage(route.split('-')[1]);
   else { route = 'home'; html = home(); }
   main.innerHTML = html;
-  // Renderitza directament la guia telefònica abans de la decoració general.
-  if (route === 'phone') {
-    try {
-      if (!window.renderPhoneFeature || !window.renderPhoneFeature()) {
-        main.innerHTML = '<div class="page"><button class="back-link" data-back>‹ Tornar</button><section class="hero"><div class="hero-kicker">☎️ CONTACTES ESSENCIALS</div><h1>Guia telefònica</h1><p>Telèfons útils per a emergències i assistència.</p><a class="call112" href="tel:112">📞 Trucar al 112</a></section><div class="info"><strong>061 · Salut Respon</strong><p>Consultes sanitàries no urgents.</p><a href="tel:061">Trucar al 061</a></div><div class="info"><strong>112 · Emergències</strong><p>Policia, bombers i ambulàncies. Només per a emergències reals.</p><a href="tel:112">Trucar al 112</a></div><div class="info"><strong>091 · Policia Nacional</strong><p>Emergències de seguretat.</p><a href="tel:091">Trucar al 091</a></div><div class="info"><strong>062 · Guàrdia Civil</strong><p>Emergències de seguretat.</p><a href="tel:062">Trucar al 062</a></div></div>';
-      }
-    } catch (error) {
-      console.error('Error obrint la guia telefònica:', error);
-      main.innerHTML = '<div class="page"><button class="back-link" data-back>‹ Tornar</button><h1>Guia telefònica</h1><a class="call112" href="tel:112">📞 Trucar al 112</a><p>La guia completa no s’ha pogut carregar. Tens aquí el telèfon d’emergències.</p></div>';
-    }
-  }
+  if (route === 'phone') bindPhonePage();
   main.focus({ preventScroll: true });
   document.querySelectorAll('[data-go]').forEach(el => el.addEventListener('click', () => go(el.dataset.go)));
   document.querySelectorAll('[data-back]').forEach(el => el.addEventListener('click', back));
