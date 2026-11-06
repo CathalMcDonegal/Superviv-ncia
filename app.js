@@ -152,6 +152,8 @@ function render() {
   else if (route.startsWith('emergency-')) html = emergencyPage(route.split('-')[1]);
   else { route = 'home'; html = home(); }
   main.innerHTML = html;
+  // Renderitza directament la guia telefònica abans de la decoració general.
+  if (route === 'phone' && window.renderPhoneFeature) window.renderPhoneFeature();
   main.focus({ preventScroll: true });
   document.querySelectorAll('[data-go]').forEach(el => el.addEventListener('click', () => go(el.dataset.go)));
   document.querySelectorAll('[data-back]').forEach(el => el.addEventListener('click', back));
