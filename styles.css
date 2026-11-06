@@ -30,3 +30,9 @@
 .bottom-nav button{min-width:0;padding-left:1px;padding-right:1px}
 .bottom-nav small{font-size:10px;white-space:nowrap}
 @media(max-width:380px){.bottom-nav span{font-size:21px}.bottom-nav small{font-size:9px}}
+
+/* Navegació inferior: sis accessos sempre visibles, inclosa la guia telefònica. */
+.bottom-nav{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr));align-items:stretch;width:100%;}
+.bottom-nav button{display:flex!important;min-width:0!important;visibility:visible!important;opacity:1!important;}
+.bottom-nav button[data-route="phone"]{color:#0b6cff!important;}
+.bottom-nav button[data-route="phone"] span{font-size:23px!important;}
