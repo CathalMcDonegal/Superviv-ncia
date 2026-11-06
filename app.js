@@ -89,6 +89,7 @@ function home() {
       <article class="card tile" data-go="bag"><span class="emoji">🎒</span><div><h3>Motxilla</h3><p>${percent('bag')}% preparada</p></div></article>
       <article class="card tile" data-go="tips"><span class="emoji">💡</span><div><h3>Tips</h3><p>Consells pràctics</p></div></article>
       <article class="card tile" data-go="family"><span class="emoji">👨‍👩‍👧</span><div><h3>Pla familiar</h3><p>Contactes i punt de trobada</p></div></article>
+      <article class="card tile phone-home-tile" data-go="phone"><span class="emoji">☎️</span><div><h3>Guia telefònica</h3><p>Accés ràpid a emergències i telèfons útils</p></div></article>
     </div>
     <div class="section-title"><h2>📊 Nivell de preparació</h2></div>
     <div class="card score" data-go="level" style="cursor:pointer"><div class="score-ring" style="--p:${p * 3.6}deg"><span>${p}%</span></div><div><strong>${status}</strong><p class="small">Kit, motxilla i pla familiar. Toca per veure com millorar-lo.</p></div></div>
@@ -147,7 +148,7 @@ function render() {
   else if (route === 'family') html = familyPage();
   else if (route === 'more') html = morePage();
   else if (route === 'level') html = levelPage();
-  else if (route === 'map' || route === 'radio') html = '';
+  else if (route === 'map' || route === 'radio' || route === 'phone') html = '';
   else if (route.startsWith('emergency-')) html = emergencyPage(route.split('-')[1]);
   else { route = 'home'; html = home(); }
   main.innerHTML = html;
@@ -168,7 +169,7 @@ function toggleCheck(el) { data[el.dataset.type][el.dataset.id] = el.checked; sa
 function resetChecklist(type) { if (confirm('Vols desmarcar tota aquesta llista?')) { data[type] = {}; save(); render(); } }
 function saveFamily(event) { event.preventDefault(); const form = new FormData(event.currentTarget); data.family = Object.fromEntries(form.entries()); save(); const n = document.querySelector('#saveNote'); if (n) n.textContent = '✔ Guardat al dispositiu'; }
 function updateNav() {
-  const current = route.startsWith('emergency-') ? 'now' : ['home','kit','bag','now','more'].includes(route) ? route : 'more';
+  const current = route.startsWith('emergency-') ? 'now' : ['home','kit','bag','now','phone','more'].includes(route) ? route : 'more';
   document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.toggle('active', b.dataset.route === current));
 }
 
