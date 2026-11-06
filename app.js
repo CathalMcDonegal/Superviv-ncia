@@ -76,7 +76,13 @@ function percent(type) {
 function planPercent() { const f = data.family; return Math.round(['contact','meeting','meeting2','outside','members'].filter(k => String(f[k] || '').trim()).length / 5 * 100); }
 function overallPercent() { return Math.round(percent('kit') * .35 + percent('bag') * .35 + planPercent() * .3); }
 let depth = 0;
-function go(next) { if (next === route) { render(); window.scrollTo(0, 0); return; } depth++; location.hash = next; }
+function go(next) {
+  if (next !== route) depth++;
+  if (location.hash.replace('#', '') !== next) location.hash = next;
+  route = next;
+  render();
+  window.scrollTo(0, 0);
+}
 function back() { if (depth > 0) { depth--; history.back(); } else { location.hash = 'home'; } }
 
 function home() {
@@ -153,7 +159,16 @@ function render() {
   else { route = 'home'; html = home(); }
   main.innerHTML = html;
   // Renderitza directament la guia telefònica abans de la decoració general.
-  if (route === 'phone' && window.renderPhoneFeature) window.renderPhoneFeature();
+  if (route === 'phone') {
+    try {
+      if (!window.renderPhoneFeature || !window.renderPhoneFeature()) {
+        main.innerHTML = '<div class="page"><button class="back-link" data-back>‹ Tornar</button><section class="hero"><div class="hero-kicker">☎️ CONTACTES ESSENCIALS</div><h1>Guia telefònica</h1><p>Telèfons útils per a emergències i assistència.</p><a class="call112" href="tel:112">📞 Trucar al 112</a></section><div class="info"><strong>061 · Salut Respon</strong><p>Consultes sanitàries no urgents.</p><a href="tel:061">Trucar al 061</a></div><div class="info"><strong>112 · Emergències</strong><p>Policia, bombers i ambulàncies. Només per a emergències reals.</p><a href="tel:112">Trucar al 112</a></div><div class="info"><strong>091 · Policia Nacional</strong><p>Emergències de seguretat.</p><a href="tel:091">Trucar al 091</a></div><div class="info"><strong>062 · Guàrdia Civil</strong><p>Emergències de seguretat.</p><a href="tel:062">Trucar al 062</a></div></div>';
+      }
+    } catch (error) {
+      console.error('Error obrint la guia telefònica:', error);
+      main.innerHTML = '<div class="page"><button class="back-link" data-back>‹ Tornar</button><h1>Guia telefònica</h1><a class="call112" href="tel:112">📞 Trucar al 112</a><p>La guia completa no s’ha pogut carregar. Tens aquí el telèfon d’emergències.</p></div>';
+    }
+  }
   main.focus({ preventScroll: true });
   document.querySelectorAll('[data-go]').forEach(el => el.addEventListener('click', () => go(el.dataset.go)));
   document.querySelectorAll('[data-back]').forEach(el => el.addEventListener('click', back));
