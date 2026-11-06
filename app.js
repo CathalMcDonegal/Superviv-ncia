@@ -76,7 +76,7 @@ function percent(type) {
 function planPercent() { const f = data.family; return Math.round(['contact','meeting','meeting2','outside','members'].filter(k => String(f[k] || '').trim()).length / 5 * 100); }
 function overallPercent() { return Math.round(percent('kit') * .35 + percent('bag') * .35 + planPercent() * .3); }
 let depth = 0;
-function go(next) { if (next === route) return; depth++; location.hash = next; }
+function go(next) { if (next === route) { render(); window.scrollTo(0, 0); return; } depth++; location.hash = next; }
 function back() { if (depth > 0) { depth--; history.back(); } else { location.hash = 'home'; } }
 
 function home() {
