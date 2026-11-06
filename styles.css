@@ -36,3 +36,10 @@
 .bottom-nav button{display:flex!important;min-width:0!important;visibility:visible!important;opacity:1!important;}
 .bottom-nav button[data-route="phone"]{color:#0b6cff!important;}
 .bottom-nav button[data-route="phone"] span{font-size:23px!important;}
+
+/* Barra inferior compacta amb accés directe a Guia */
+.bottom-nav{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px;padding-left:5px;padding-right:5px;}
+.bottom-nav button{min-width:0!important;padding:4px 0!important;}
+.bottom-nav button[data-route="phone"]{background:#e8f1ff;color:#075bc5;font-weight:900;}
+.bottom-nav button[data-route="phone"] span{font-size:23px!important;}
+.bottom-nav button[data-route="phone"] small{font-size:10px!important;}
