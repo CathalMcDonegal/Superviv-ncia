@@ -102,5 +102,6 @@
   document.addEventListener('change',e=>{const input=e.target;if(input.matches('input[data-id="food"]')){syncFoodVisibility(input);return;}if(input.matches('input[data-food-item]')){const saved=loadFood();const key=`${input.dataset.foodType||'kit'}-${input.dataset.foodItem}`;saved[key]=input.checked;saveFood(saved);input.closest('.food-option')?.classList.toggle('done',input.checked);}});
   function decorate(){addFoodMenus();if(!renderFeature()&&['','home'].includes(location.hash.replace('#','')))addTools();if(location.hash.replace('#','')==='more'){const page=document.querySelector('.page');if(page&&!page.querySelector('[data-feature="phone"]')){const card=document.createElement('article');card.className='card tile feature-tile';card.dataset.feature='phone';card.innerHTML='<span class="emoji">☎️</span><div><h3>Guia telefònica</h3><p>Catalunya · Espanya · Europa · Estrangers</p></div>';page.querySelector('.grid')?.appendChild(card);}}}
   document.addEventListener('click',e=>{const feature=e.target.closest('[data-feature]');if(feature){location.hash=feature.dataset.feature;return;}if(e.target.closest('[data-feature-back]')){back();return;}});
+  window.renderPhoneFeature=()=>{if(location.hash.replace('#','')==='phone')renderFeature();};
   window.decorateFeatures=decorate;addEventListener('load',()=>setTimeout(decorate,0));setTimeout(decorate,50);
 })();
