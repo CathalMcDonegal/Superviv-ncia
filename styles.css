@@ -22,3 +22,11 @@
 .phone-personal h2{font-size:18px;margin:0 0 12px}
 .phone-delete{margin-top:10px;border:0;border-radius:9px;padding:8px 10px;background:#fff0f0;color:#b4232b;font-weight:800}
 .phone-source{margin-top:14px;line-height:1.5}
+
+/* Acces directe a la guia telefònica i navegació amb sis opcions */
+.phone-home-tile{grid-column:1/-1;min-height:104px;flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;border:2px solid #0b6cff;background:linear-gradient(110deg,#eaf4ff,#fff)}
+.phone-home-tile .emoji{font-size:38px}
+.phone-home-tile h3{margin:0 0 4px;font-size:18px;color:#084da8}
+.bottom-nav button{min-width:0;padding-left:1px;padding-right:1px}
+.bottom-nav small{font-size:10px;white-space:nowrap}
+@media(max-width:380px){.bottom-nav span{font-size:21px}.bottom-nav small{font-size:9px}}
