@@ -252,6 +252,7 @@ function shareEmergencyLocation(button) {
 
 function emergencyOfflinePage() {
   const f=data.family||{};
+  const familyName=String(f.name||'').trim();
   const personal=String(f.contact||'').trim();
   const outside=String(f.outside||'').trim();
   const meeting=String(f.meeting||'').trim();
@@ -262,12 +263,33 @@ function emergencyOfflinePage() {
   return `<div class="page offline-page"><section class="hero hero-danger"><div class="hero-kicker">🆘 PRIORITAT · SEGURETAT</div><h1>Mode emergència</h1><p>Informació essencial i dades familiars guardades en aquest dispositiu.</p><a class="call112" href="tel:112">📞 Trucar al 112</a><button class="btn blue sos-location" type="button" data-share-location>📍 Compartir la meva ubicació</button></section>
   <section class="offline-priority"><h2>Primer, fes això</h2><ol><li><b>Protegeix-te.</b> Allunya’t del perill immediat i no t’exposis per rescatar objectes.</li><li><b>Truca al 112</b> si hi ha ferits, risc greu, incendi, rescat o perill immediat. Explica què passa, on ets i quantes persones necessiten ajuda.</li><li><b>Segueix les autoritats.</b> Evacua o confina’t segons les instruccions; no improvisis rutes perilloses.</li><li><b>Estalvia bateria.</b> Activa l’estalvi d’energia i envia missatges curts si la xarxa està saturada.</li></ol></section>
   <section class="info offline-family"><div class="offline-section-head"><h2>👨‍👩‍👧 Dades del teu pla familiar</h2><button type="button" class="offline-edit" data-go="family">Editar</button></div>
-  ${row('Adreça',f.address)}${row('Contacte principal',personal)}${row('Punt de trobada',meeting)}${row('Punt alternatiu',backup)}${row('Contacte fora de la zona',outside)}${row('Membres i telèfons',members)}${row('Informació important',notes)}
-  ${(!f.address&&!personal&&!meeting&&!backup&&!outside&&!members&&!notes)?'<p class="small">Encara no has desat dades familiars. Pots configurar-les ara; es guarden al dispositiu.</p>':''}</section>
+  ${row('Família',familyName)}${row('Adreça',f.address)}${row('Contacte principal',personal)}${row('Punt de trobada',meeting)}${row('Punt alternatiu',backup)}${row('Contacte fora de la zona',outside)}${row('Membres i telèfons',members)}${row('Informació important',notes)}
+  ${(!familyName&&!f.address&&!personal&&!meeting&&!backup&&!outside&&!members&&!notes)?'<p class="small">Encara no has desat dades familiars. Pots configurar-les ara; es guarden al dispositiu.</p>':''}</section>
   <div class="grid offline-shortcuts"><article class="card tile" data-go="now"><span class="emoji">🚨</span><div><h3>Guies d’emergència</h3><p>Incendi, inundació, tempesta i més</p></div></article><article class="card tile" data-go="phone"><span class="emoji">☎️</span><div><h3>Telèfons útils</h3><p>Contactes guardats i serveis</p></div></article><article class="card tile" data-go="family"><span class="emoji">👨‍👩‍👧</span><div><h3>Pla familiar</h3><p>Actualitza les dades</p></div></article></div>
-  <div class="info offline-note"><strong>ℹ️ Què funciona sense internet?</strong><p>Aquesta pantalla, les guies i les dades familiars ja guardades es poden consultar quan l’app i els seus fitxers s’han carregat prèviament. La trucada al 112 necessita cobertura mòbil; el GPS necessita permís i pot fallar. Compartir la ubicació pot requerir connexió. Els mapes en línia no funcionen sense internet.</p><p><b>Privacitat:</b> les dades familiars es llegeixen del teu dispositiu i no s’envien automàticament.</p></div></div>`;
+  <div class="info offline-note"><strong>ℹ️ Què funciona sense internet?</strong><p>Aquesta pantalla, les guies i les dades familiars ja guardades es poden consultar quan l’app i els seus fitxers s’han carregat prèviament. La trucada al 112 necessita cobertura mòbil; el GPS necessita permís i pot fallar. Compartir la ubicació pot requerir connexió. Els mapes en línia no funcionen sense internet.</p><p><b>Privacitat:</b> les dades familiars es llegeixen del teu dispositiu i no s’envien automàticament.</p><button class="btn light" type="button" data-go="offline-check">🧪 Comprovar el mode sense connexió</button></div></div>`;
 }
 
+function offlineCheckPage() {
+  const online = navigator.onLine;
+  const familySaved = !!localStorage.getItem(KEY);
+  const swSupported = 'serviceWorker' in navigator;
+  const cacheSupported = 'caches' in window;
+  return `<div class="page offline-page"><button class="back-link" data-back>‹ Tornar</button><section class="hero"><div class="hero-kicker">🧪 COMPROVACIÓ</div><h1>Preparació sense connexió</h1><p>Aquesta comprovació mira el que el navegador pot verificar ara mateix. No substitueix una prova real en mode avió.</p></section>
+  <div class="info offline-check-list"><div><b>${online?'🟢 Connexió disponible':'🟠 Sense connexió detectada'}</b><small>Estat de xarxa del dispositiu</small></div><div><b>${swSupported?'🟢 Service Worker disponible':'🔴 Service Worker no disponible'}</b><small>Necessari per mantenir recursos locals</small></div><div><b>${cacheSupported?'🟢 Cache API disponible':'🔴 Cache API no disponible'}</b><small>Permet consultar fitxers emmagatzemats</small></div><div><b>${familySaved?'🟢 Dades locals trobades':'🟡 Encara no hi ha dades familiars desades'}</b><small>La informació personal es conserva en aquest dispositiu</small></div><p id="offlineCacheStatus" class="small">Comprovant els fitxers locals…</p><button class="btn blue" id="offlineRunCheck">Tornar a comprovar</button></div>
+  <div class="info"><h2>Prova real recomanada</h2><ol><li>Obre l’app amb internet i espera que carregui completament.</li><li>Activa el mode avió i comprova que Wi-Fi també estigui desactivat.</li><li>Tanca i torna a obrir l’app des de la icona instal·lada.</li><li>Entra al Mode emergència, les guies i el pla familiar.</li><li>Comprova que les dades guardades continuen apareixent.</li></ol><p class="guide-note">Les trucades necessiten cobertura mòbil; GPS, brúixola i compartir ubicació depenen del dispositiu i dels permisos. Els mapes i les consultes externes necessiten internet.</p></div></div>`;
+}
+async function runOfflineAssetCheck() {
+  const el=document.getElementById('offlineCacheStatus'); if(!el)return;
+  if(!('caches' in window)){el.textContent='Aquest navegador no exposa la memòria cau.';return;}
+  try {
+    const keys=await caches.keys(); const cacheNames=keys.filter(k=>k.startsWith('supervivencia-'));
+    const cached=new Set();
+    for(const name of cacheNames){const c=await caches.open(name);for(const req of await c.keys())cached.add(new URL(req.url).pathname.split('/').pop());}
+    const required=['index.html','styles.css','app.js','features.js','preparedness.js'];
+    const missing=required.filter(x=>!cached.has(x));
+    el.textContent=missing.length?'Fitxers que no consten a la memòria cau: '+missing.join(', '):'🟢 Fitxers principals localitzats a la memòria cau: index, estils, app, guies i preparació.';
+  } catch(_){el.textContent='No s’ha pogut llegir la memòria cau. Prova-ho des de l’app instal·lada.';}
+}
 function render() {
   const main = document.querySelector('#main');
   if (!main) return;
@@ -277,6 +299,7 @@ function render() {
   else if (route === 'bag') html = checklistPage('bag');
   else if (route === 'now') html = nowPage();
   else if (route === 'offline') html = emergencyOfflinePage();
+  else if (route === 'offline-check') html = offlineCheckPage();
   else if (route === 'tips') html = tipsPage();
   else if (route === 'family') html = familyPage();
   else if (route === 'more') html = morePage();
@@ -287,6 +310,7 @@ function render() {
   else { route = 'home'; html = home(); }
   main.innerHTML = html;
   if (route === 'phone') bindPhonePage();
+  if (route === 'offline-check') { runOfflineAssetCheck(); main.querySelector('#offlineRunCheck')?.addEventListener('click',runOfflineAssetCheck); }
   main.querySelectorAll('[data-share-location]').forEach(button=>button.addEventListener('click',()=>shareEmergencyLocation(button)));
   main.focus({ preventScroll: true });
   document.querySelectorAll('[data-go]').forEach(el => el.addEventListener('click', () => go(el.dataset.go)));
