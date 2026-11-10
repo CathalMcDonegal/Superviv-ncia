@@ -80,3 +80,10 @@
 .travel-import-label{display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
 #travelBackupNote{min-height:18px;margin-bottom:0}
 @media(max-width:380px){.travel-backup-actions>*{flex:1}}
+
+/* Icona d'eliminació compacta per als contactes personalitzats */
+.phone-delete-icon{margin:0;flex:0 0 36px;width:36px;height:36px;padding:0;display:inline-grid;place-items:center;border:0;border-radius:50%;background:#fff0f0;color:#b4232b;font-size:16px;line-height:1;cursor:pointer}
+.phone-delete-icon:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
+.phone-add-section{margin-top:16px}
+.phone-add-section h2{margin-bottom:12px}
+.travel-card-head .phone-delete-icon{margin-left:auto}
