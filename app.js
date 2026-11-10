@@ -155,14 +155,17 @@ const PHONE_CONTACTS = [
   ['🛡️','Guàrdia Civil','062','Atenció de la Guàrdia Civil.','Espanya'],
   ['🟣','Atenció violència de gènere','016','Atenció gratuïta. En cas de perill immediat, truca al 112.','Espanya'],
   ['💚','Atenció conducta suïcida','024','Línia d’ajuda en situacions de crisi emocional o risc suïcida.','Espanya'],
-  ['🇪🇺','Emergències a la Unió Europea','112','Número europeu d’emergències.','Europa']
+  ['🇪🇺','Emergències a la Unió Europea','112','Número europeu d’emergències.','Europa'],
+  ['🌍','Emergències amb atenció multilingüe','112','A Catalunya poden atendre en diverses llengües; si cal, poden activar interpretació.','Estrangers'],
+  ['🛂','Consolat o ambaixada del teu país','','El telèfon d’emergència consular depèn de la nacionalitat i del país on et trobis. Desa’l abans de viatjar.','Estrangers'],
+  ['🧳','Assegurança de viatge','','Afegeix el telèfon d’assistència de la teva assegurança als contactes personals.','Estrangers']
 ];
 function phonePage() {
   return `<div class="page"><button class="back-link" data-back>‹ Tornar</button>
     <section class="hero hero-phone"><div class="hero-kicker">☎️ CONTACTES ESSENCIALS</div><h1>Guia telefònica</h1><p>Telèfons útils per a emergències, salut i assistència.</p><a class="phone-call-main" href="tel:112">📞 TRUCAR AL 112</a></section>
     <div class="phone-warning">⚠️ El 112 és només per a emergències reals. Per a consultes sanitàries no vitals a Catalunya, utilitza el 061.</div>
     <input class="phone-search" id="phoneSearch" type="search" placeholder="🔎 Cerca servei o número…" autocomplete="off">
-    <div class="phone-tabs">${['Catalunya','Espanya','Europa','Personals'].map((x,i)=>`<button type="button" class="phone-tab ${i===0?'active':''}" data-phone-area="${x}">${['🏴','🇪🇸','🇪🇺','👥'][i]} ${x}</button>`).join('')}</div>
+    <div class="phone-tabs">${['Catalunya','Espanya','Europa','Estrangers','Personals'].map((x,i)=>`<button type="button" class="phone-tab ${i===0?'active':''}" data-phone-area="${x}">${['🏴','🇪🇸','🇪🇺','🌍','👥'][i]} ${x}</button>`).join('')}</div>
     <div id="phoneList"></div>
     <section class="phone-personal"><h2>➕ Afegir contacte personal</h2><form id="phoneForm" class="form"><div class="field"><label>Nom o servei</label><input name="name" required placeholder="Ex. Assegurança de la llar"></div><div class="field"><label>Telèfon</label><input name="number" type="tel" required placeholder="Ex. +34 600 000 000"></div><div class="field"><label>Categoria</label><input name="group" placeholder="Ex. Família, assegurança, veïns"></div><button class="btn blue" type="submit">💾 Guardar contacte</button></form></section>
   </div>`;
@@ -175,7 +178,7 @@ function bindPhonePage() {
     const rows=area==='Personals'?read().map((x,i)=>({icon:'👤',name:x.name,number:x.number,note:x.note||x.group||'Contacte personal',id:i})):PHONE_CONTACTS.filter(x=>x[4]===area).map(x=>({icon:x[0],name:x[1],number:x[2],note:x[3]}));
     const filtered=rows.filter(x=>!q||[x.name,x.number,x.note].join(' ').toLocaleLowerCase('ca').includes(q));
     const list=document.getElementById('phoneList'); if(!list)return;
-    list.innerHTML=filtered.length?filtered.map(x=>`<article class="phone-card ${x.number==='112'?'phone-urgent':''}"><div class="phone-card-top"><span class="phone-icon">${x.icon}</span><div class="phone-copy"><strong>${escapeHtml(x.name)}</strong><small>${escapeHtml(x.note)}</small></div><a class="phone-number" href="tel:${String(x.number).replace(/[^+0-9]/g,'')}">${escapeHtml(x.number)}</a></div>${area==='Personals'?'<button type="button" class="phone-delete" data-phone-delete="'+x.id+'">Eliminar contacte</button>':''}</article>`).join(''):'<div class="info">No hi ha contactes que coincideixin amb la cerca.</div>';
+    list.innerHTML=filtered.length?filtered.map(x=>`<article class="phone-card ${x.number==='112'?'phone-urgent':''}"><div class="phone-card-top"><span class="phone-icon">${x.icon}</span><div class="phone-copy"><strong>${escapeHtml(x.name)}</strong><small>${escapeHtml(x.note)}</small></div>${x.number ? `<a class="phone-number" href="tel:${String(x.number).replace(/[^+0-9]/g,'')}">${escapeHtml(x.number)}</a>` : ''}</div>${area==='Personals'?'<button type="button" class="phone-delete" data-phone-delete="'+x.id+'">Eliminar contacte</button>':''}</article>`).join(''):'<div class="info">No hi ha contactes que coincideixin amb la cerca.</div>';
     list.querySelectorAll('[data-phone-delete]').forEach(b=>b.addEventListener('click',()=>{const c=read();c.splice(Number(b.dataset.phoneDelete),1);localStorage.setItem(PHONE_CONTACTS_KEY,JSON.stringify(c));renderList()}));
   };
   document.querySelectorAll('[data-phone-area]').forEach(b=>b.addEventListener('click',()=>{area=b.dataset.phoneArea;document.querySelectorAll('[data-phone-area]').forEach(x=>x.classList.toggle('active',x===b));renderList()}));
