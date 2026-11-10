@@ -185,7 +185,7 @@ function bindPhonePage() {
       ${x.phone?`<p><b>☎️ Telèfon:</b> <a class="travel-contact-link" href="tel:${String(x.phone).replace(/[^+0-9]/g,'')}">${escapeHtml(x.phone)}</a></p>`:''}
       ${x.emergency?`<p><b>🚨 Emergències consulars:</b> <a class="travel-contact-link" href="tel:${String(x.emergency).replace(/[^+0-9]/g,'')}">${escapeHtml(x.emergency)}</a></p>`:''}
       ${x.email?`<p><b>✉️ Correu:</b> <a class="travel-contact-link" href="mailto:${escapeHtml(x.email)}">${escapeHtml(x.email)}</a></p>`:''}
-      ${x.website?`<p><a class="phone-link" href="${escapeHtml(x.website)}" target="_blank" rel="noopener">Web oficial ↗</a></p>`:''}
+      ${x.website && /^https?:\/\//i.test(x.website)?`<p><a class="phone-link" href="${escapeHtml(x.website)}" target="_blank" rel="noopener">Web oficial ↗</a></p>`:''}
       ${x.notes?`<p><b>ℹ️ Notes:</b> ${escapeHtml(x.notes)}</p>`:''}
       <small class="travel-saved">Desat al dispositiu · Registre ${i+1}</small></article>`).join(''):'<div class="info">Encara no tens cap consolat guardat. Afegeix-ne el primer amb el formulari.</div>'}
       <section class="phone-personal travel-form-wrap"><h2>➕ Afegir consolat o ambaixada</h2><form id="travelForm" class="form">
