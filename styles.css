@@ -135,3 +135,18 @@
 
 .sos-location{width:100%;margin-top:10px;min-height:48px;font-weight:900}
 .hero-danger .small{color:#fff;opacity:.9;text-align:center;margin:8px 0 0}
+
+.offline-tile{border:1px solid #f0b6aa;background:linear-gradient(135deg,#fff8f5,#fff)}
+.offline-tile .emoji{background:#ffe7df}
+.offline-page .offline-priority{background:#fff;border:1px solid #f0c9bd;border-left:5px solid #d94332;border-radius:16px;padding:15px;margin:14px 0;box-shadow:var(--shadow)}
+.offline-priority h2,.offline-family h2{margin:0 0 10px;font-size:18px;color:#10233f}
+.offline-priority ol{padding-left:22px;margin:0}
+.offline-priority li{padding:5px 0;line-height:1.45}
+.offline-section-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.offline-edit{border:0;border-radius:9px;padding:8px 12px;background:#eaf3f8;color:#174f91;font-weight:800}
+.offline-data-row{padding:10px 0;border-top:1px solid #e8eef3;overflow-wrap:anywhere}
+.offline-data-row small,.offline-data-row strong{display:block}
+.offline-data-row small{color:#64748b;font-size:11px;margin-bottom:3px}
+.offline-data-row strong{color:#10233f;font-size:14px;line-height:1.4}
+.offline-shortcuts{margin-top:14px}
+.offline-note{border-left:4px solid #e3a33d}
