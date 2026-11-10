@@ -91,7 +91,7 @@
 /* Mòdul de preparació familiar, provisions i kits */
 .prep-home-tile{grid-column:1/-1;min-height:104px;flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;border:2px solid #20b26b;background:linear-gradient(110deg,#e9fff3,#fff)}
 .prep-page .prep-score{display:flex;align-items:center;gap:15px;background:#fff;border:1px solid #dce8f0;border-radius:18px;padding:15px;margin-top:13px;box-shadow:var(--shadow)}
-.prep-score-ring{width:82px;height:82px;flex:none;border-radius:50%;background:conic-gradient(#20b26b 0 70%,#e7eef5 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.prep-score-ring{background:conic-gradient(#20b26b 0 var(--prep-score,0%),#e7eef5 var(--prep-score,0%) 100%);width:82px;height:82px;flex:none;border-radius:50%;background:conic-gradient(#20b26b 0 70%,#e7eef5 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
 .prep-score-ring:before{content:"";position:absolute;inset:7px;border-radius:50%;background:#fff}
 .prep-score-ring strong,.prep-score-ring small{position:relative;z-index:1}
 .prep-score-ring strong{font-size:22px}.prep-score-ring small{font-size:10px;color:#64748b;font-weight:800}
