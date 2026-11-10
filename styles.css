@@ -43,3 +43,23 @@
 .bottom-nav button[data-route="phone"]{background:#e8f1ff;color:#075bc5;font-weight:900;}
 .bottom-nav button[data-route="phone"] span{font-size:23px!important;}
 .bottom-nav button[data-route="phone"] small{font-size:10px!important;}
+
+
+/* Guies pràctiques: contingut desplegable, escanejable i sense repetir els tips generals */
+.guide-list{display:grid;gap:10px;margin-top:15px}
+.guide-card{background:#fff;border:1px solid #dce6f0;border-radius:16px;box-shadow:0 5px 16px rgba(7,26,53,.07);overflow:hidden}
+.guide-card summary{list-style:none;display:flex;align-items:center;gap:12px;padding:15px;cursor:pointer}
+.guide-card summary::-webkit-details-marker{display:none}
+.guide-icon{width:43px;height:43px;display:grid;place-items:center;background:#edf5ff;border-radius:13px;font-size:24px;flex:none}
+.guide-heading{display:grid;gap:3px;flex:1;min-width:0}
+.guide-heading b{font-size:15px}
+.guide-heading small{font-size:12px;color:#64748b;font-weight:700}
+.guide-chevron{font-size:23px;font-weight:800;color:#0b6cff;transition:transform .2s}
+.guide-card[open] .guide-chevron{transform:rotate(45deg)}
+.guide-body{padding:0 17px 16px 70px;color:#33465d;font-size:14px;line-height:1.55}
+.guide-body ol,.guide-body ul{padding-left:19px;margin:0}
+.guide-body li{padding:0 0 8px}
+.guide-body a{color:#075bc5;font-weight:850}
+.guide-note{background:#fff7df;border-left:4px solid #e5b62c;border-radius:8px;padding:10px 12px;margin:8px 0 0;font-size:13px}
+.guide-source{margin:14px 3px;line-height:1.5}
+@media(max-width:420px){.guide-body{padding-left:17px}.guide-card summary{padding:13px}.guide-icon{width:39px;height:39px}}
