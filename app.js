@@ -242,7 +242,7 @@ function render() {
   else if (route === 'more') html = morePage();
   else if (route === 'level') html = levelPage();
   else if (route === 'phone') html = phonePage();
-  else if (route === 'map' || route === 'radio') html = '';
+  else if (route === 'map' || route === 'radio' || route === 'navigation') html = '';
   else if (route.startsWith('emergency-')) html = emergencyPage(route.split('-')[1]);
   else { route = 'home'; html = home(); }
   main.innerHTML = html;
