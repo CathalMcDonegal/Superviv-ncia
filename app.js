@@ -156,16 +156,17 @@ const PHONE_CONTACTS = [
   ['🟣','Atenció violència de gènere','016','Atenció gratuïta. En cas de perill immediat, truca al 112.','Espanya'],
   ['💚','Atenció conducta suïcida','024','Línia d’ajuda en situacions de crisi emocional o risc suïcida.','Espanya'],
   ['🇪🇺','Emergències a la Unió Europea','112','Número europeu d’emergències.','Europa'],
-  ['🌍','Emergències amb atenció multilingüe','112','A Catalunya poden atendre en diverses llengües; si cal, poden activar interpretació.','Estrangers'],
-  ['🛂','Consolat o ambaixada del teu país','','El telèfon d’emergència consular depèn de la nacionalitat i del país on et trobis. Desa’l abans de viatjar.','Estrangers'],
-  ['🧳','Assegurança de viatge','','Afegeix el telèfon d’assistència de la teva assegurança als contactes personals.','Estrangers']
+  ['🌍','Emergències amb atenció multilingüe','112','A Catalunya poden atendre en diverses llengües; si cal, poden activar interpretació.','Europa']
 ];
+const TRAVEL_RECORDS_KEY = 'supervivencia-travel-records-v1';
+function readTravelRecords() { try { return JSON.parse(localStorage.getItem(TRAVEL_RECORDS_KEY) || '[]'); } catch (_) { return []; } }
+function saveTravelRecords(rows) { localStorage.setItem(TRAVEL_RECORDS_KEY, JSON.stringify(rows)); }
 function phonePage() {
   return `<div class="page"><button class="back-link" data-back>‹ Tornar</button>
-    <section class="hero hero-phone"><div class="hero-kicker">☎️ CONTACTES ESSENCIALS</div><h1>Guia telefònica</h1><p>Telèfons útils per a emergències, salut i assistència.</p><a class="phone-call-main" href="tel:112">📞 TRUCAR AL 112</a></section>
+    <section class="hero hero-phone"><div class="hero-kicker">☎️ CONTACTES ESSENCIALS</div><h1>Guia telefònica</h1><p>Telèfons útils per a emergències, salut, seguretat i viatges.</p><a class="phone-call-main" href="tel:112">📞 TRUCAR AL 112</a></section>
     <div class="phone-warning">⚠️ El 112 és només per a emergències reals. Per a consultes sanitàries no vitals a Catalunya, utilitza el 061.</div>
     <input class="phone-search" id="phoneSearch" type="search" placeholder="🔎 Cerca servei o número…" autocomplete="off">
-    <div class="phone-tabs">${['Catalunya','Espanya','Europa','Estrangers','Personals'].map((x,i)=>`<button type="button" class="phone-tab ${i===0?'active':''}" data-phone-area="${x}">${['🏴','🇪🇸','🇪🇺','🌍','👥'][i]} ${x}</button>`).join('')}</div>
+    <div class="phone-tabs" id="phoneTabs">${['Catalunya','Espanya','Europa','Viatges a l’estranger','Personals'].map((x,i)=>`<button type="button" class="phone-tab ${i===0?'active':''}" data-phone-area="${x}">${['🏴','🇪🇸','🇪🇺','✈️','👥'][i]} ${x}</button>`).join('')}</div>
     <div id="phoneList"></div>
     <section class="phone-personal"><h2>➕ Afegir contacte personal</h2><form id="phoneForm" class="form"><div class="field"><label>Nom o servei</label><input name="name" required placeholder="Ex. Assegurança de la llar"></div><div class="field"><label>Telèfon</label><input name="number" type="tel" required placeholder="Ex. +34 600 000 000"></div><div class="field"><label>Categoria</label><input name="group" placeholder="Ex. Família, assegurança, veïns"></div><button class="btn blue" type="submit">💾 Guardar contacte</button></form></section>
   </div>`;
@@ -175,9 +176,37 @@ function bindPhonePage() {
   const read=()=>{try{return JSON.parse(localStorage.getItem(PHONE_CONTACTS_KEY)||'[]')}catch(_){return []}};
   const renderList=()=>{
     const q=(document.getElementById('phoneSearch')?.value||'').toLocaleLowerCase('ca').trim();
+    const list=document.getElementById('phoneList'); if(!list)return;
+    if(area==='Viatges a l’estranger') {
+      const rows=readTravelRecords().filter(x=>!q||[x.country,x.city,x.consulate,x.address,x.phone,x.emergency,x.email,x.notes].join(' ').toLocaleLowerCase('ca').includes(q));
+      list.innerHTML=`<section class="travel-intro"><strong>✈️ Els teus contactes consulars</strong><p>Desa els consolats o ambaixades que et poden ajudar durant els viatges. Els registres es conserven en aquest dispositiu i els pots exportar per tenir-ne una còpia.</p></section>
+      ${rows.length?rows.map((x,i)=>`<article class="phone-card travel-card"><div class="travel-card-head"><span class="travel-flag">🌍</span><div class="phone-copy"><strong>${escapeHtml(x.consulate||'Consolat / ambaixada')}</strong><small>${escapeHtml([x.city,x.country].filter(Boolean).join(', '))}</small></div></div>
+      ${x.address?`<p><b>📍 Adreça:</b> ${escapeHtml(x.address)}</p>`:''}
+      ${x.phone?`<p><b>☎️ Telèfon:</b> <a class="travel-contact-link" href="tel:${String(x.phone).replace(/[^+0-9]/g,'')}">${escapeHtml(x.phone)}</a></p>`:''}
+      ${x.emergency?`<p><b>🚨 Emergències consulars:</b> <a class="travel-contact-link" href="tel:${String(x.emergency).replace(/[^+0-9]/g,'')}">${escapeHtml(x.emergency)}</a></p>`:''}
+      ${x.email?`<p><b>✉️ Correu:</b> <a class="travel-contact-link" href="mailto:${escapeHtml(x.email)}">${escapeHtml(x.email)}</a></p>`:''}
+      ${x.website?`<p><a class="phone-link" href="${escapeHtml(x.website)}" target="_blank" rel="noopener">Web oficial ↗</a></p>`:''}
+      ${x.notes?`<p><b>ℹ️ Notes:</b> ${escapeHtml(x.notes)}</p>`:''}
+      <small class="travel-saved">Desat al dispositiu · Registre ${i+1}</small></article>`).join(''):'<div class="info">Encara no tens cap consolat guardat. Afegeix-ne el primer amb el formulari.</div>'}
+      <section class="phone-personal travel-form-wrap"><h2>➕ Afegir consolat o ambaixada</h2><form id="travelForm" class="form">
+      <div class="field"><label>País que visites *</label><input name="country" required placeholder="Ex. Estats Units"></div>
+      <div class="field"><label>Ciutat *</label><input name="city" required placeholder="Ex. Nova York"></div>
+      <div class="field"><label>Nom del consolat / ambaixada *</label><input name="consulate" required placeholder="Ex. Consolat General d’Espanya a Nova York"></div>
+      <div class="field"><label>Adreça completa</label><textarea name="address" placeholder="Carrer, número, codi postal i ciutat"></textarea></div>
+      <div class="field"><label>Telèfon principal</label><input name="phone" type="tel" placeholder="+1 ..."></div>
+      <div class="field"><label>Telèfon d'emergències consulars</label><input name="emergency" type="tel" placeholder="+1 ..."></div>
+      <div class="field"><label>Correu electrònic</label><input name="email" type="email" placeholder="contacte@..."></div>
+      <div class="field"><label>Pàgina web oficial</label><input name="website" type="url" placeholder="https://..."></div>
+      <div class="field"><label>Notes / horari / cita prèvia</label><textarea name="notes" placeholder="Horari, zona consular, documentació..."></textarea></div>
+      <button class="btn blue" type="submit">💾 Guardar aquest consolat</button></form></section>
+      <section class="travel-backup"><h3>🔐 Còpia i recuperació</h3><p>Els registres es guarden al dispositiu i no desapareixen en tancar l'app ni en actualitzar-la. Exporta una còpia periòdicament per poder recuperar-los si canvies de mòbil o esborres les dades de l'app.</p><div class="travel-backup-actions"><button type="button" class="btn light" id="exportTravel">⬇ Exportar còpia</button><label class="btn light travel-import-label">↥ Recuperar còpia<input type="file" id="importTravel" accept="application/json,.json" hidden></label></div><p class="small" id="travelBackupNote" aria-live="polite"></p></section>`;
+      document.getElementById('travelForm')?.addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const row=Object.fromEntries(fd.entries());const rows=readTravelRecords();rows.push({...row,savedAt:new Date().toISOString()});saveTravelRecords(rows);e.currentTarget.reset();renderList();document.getElementById('travelBackupNote').textContent='✔ Consolat guardat. També pots exportar-ne una còpia.';});
+      document.getElementById('exportTravel')?.addEventListener('click',()=>{const payload={app:'Supervivència',type:'travel-consulates',version:1,records:readTravelRecords()};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='supervivencia-contactes-consulars.json';a.click();URL.revokeObjectURL(url);document.getElementById('travelBackupNote').textContent='✔ Còpia exportada.';});
+      document.getElementById('importTravel')?.addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{const parsed=JSON.parse(await file.text());const incoming=Array.isArray(parsed)?parsed:parsed.records;if(!Array.isArray(incoming))throw new Error('format');const current=readTravelRecords();const merged=[...current];incoming.forEach(row=>{if(row&&typeof row==='object'&&!merged.some(x=>x.country===row.country&&x.city===row.city&&x.consulate===row.consulate&&x.phone===row.phone))merged.push(row)});saveTravelRecords(merged);renderList();document.getElementById('travelBackupNote').textContent='✔ Còpia recuperada. S’han conservat els registres que ja tenies.';}catch(_){document.getElementById('travelBackupNote').textContent='No s’ha pogut llegir aquesta còpia. Comprova que sigui un fitxer exportat per l’app.';}e.target.value='';});
+      return;
+    }
     const rows=area==='Personals'?read().map((x,i)=>({icon:'👤',name:x.name,number:x.number,note:x.note||x.group||'Contacte personal',id:i})):PHONE_CONTACTS.filter(x=>x[4]===area).map(x=>({icon:x[0],name:x[1],number:x[2],note:x[3]}));
     const filtered=rows.filter(x=>!q||[x.name,x.number,x.note].join(' ').toLocaleLowerCase('ca').includes(q));
-    const list=document.getElementById('phoneList'); if(!list)return;
     list.innerHTML=filtered.length?filtered.map(x=>`<article class="phone-card ${x.number==='112'?'phone-urgent':''}"><div class="phone-card-top"><span class="phone-icon">${x.icon}</span><div class="phone-copy"><strong>${escapeHtml(x.name)}</strong><small>${escapeHtml(x.note)}</small></div>${x.number ? `<a class="phone-number" href="tel:${String(x.number).replace(/[^+0-9]/g,'')}">${escapeHtml(x.number)}</a>` : ''}</div>${area==='Personals'?'<button type="button" class="phone-delete" data-phone-delete="'+x.id+'">Eliminar contacte</button>':''}</article>`).join(''):'<div class="info">No hi ha contactes que coincideixin amb la cerca.</div>';
     list.querySelectorAll('[data-phone-delete]').forEach(b=>b.addEventListener('click',()=>{const c=read();c.splice(Number(b.dataset.phoneDelete),1);localStorage.setItem(PHONE_CONTACTS_KEY,JSON.stringify(c));renderList()}));
   };
@@ -186,7 +215,6 @@ function bindPhonePage() {
   document.getElementById('phoneForm')?.addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const c=read();c.push({name:fd.get('name'),number:fd.get('number'),group:fd.get('group')||'Personal'});localStorage.setItem(PHONE_CONTACTS_KEY,JSON.stringify(c));e.currentTarget.reset();area='Personals';document.querySelectorAll('[data-phone-area]').forEach(x=>x.classList.toggle('active',x.dataset.phoneArea===area));renderList();});
   renderList();
 }
-
 function render() {
   const main = document.querySelector('#main');
   if (!main) return;
