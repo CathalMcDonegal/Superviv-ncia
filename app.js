@@ -91,6 +91,7 @@ function home() {
   return `<div class="page">
     <section class="hero hero-home"><div class="hero-kicker">🛡️ PREPARACIÓ FAMILIAR</div><h1>Estigues preparat.</h1><p>Una app senzilla per preparar casa, motxilla i família i saber què fer quan passa una emergència.</p><button class="btn primary cta" data-go="now">🚨 Què faig ara?</button></section>
     <div class="grid">
+      <article class="card tile offline-tile" data-go="offline"><span class="emoji">🆘</span><div><h3>Mode emergència</h3><p>Accés ràpid sense internet</p></div></article>
       <article class="card tile" data-go="kit"><span class="emoji">🏠</span><div><h3>Kit de casa</h3><p>${percent('kit')}% preparat</p></div></article>
       <article class="card tile" data-go="bag"><span class="emoji">🎒</span><div><h3>Motxilla</h3><p>${percent('bag')}% preparada</p></div></article>
       <article class="card tile" data-go="tips"><span class="emoji">💡</span><div><h3>Tips</h3><p>Consells pràctics</p></div></article>
@@ -139,7 +140,7 @@ function levelPage() {
   return `<div class="page"><button class="back-link" data-back>‹ Tornar</button><section class="hero"><div class="hero-kicker">📊 NIVELL</div><h1>${t}% · ${lab}</h1><p>Kit de casa i motxilla pesen un 35% cadascun; el pla familiar, un 30%.</p></section>${parts.map(x => `<div class="progress-card card"><div class="progress-row"><span>${x[0]}</span><strong>${x[1]}%</strong></div><div class="progress"><i style="width:${x[1]}%"></i></div></div>`).join('')}${t < 100 ? `<button class="btn blue" style="width:100%;margin-top:14px" data-go="${w[2]}">Millora: ${w[0]}</button>` : ''}</div>`;
 }
 function morePage() {
-  return `<div class="page"><section class="hero"><h1>☰ Més</h1><p>Opcions i informació de l’app.</p></section><div class="grid"><article class="card tile" data-go="tips"><span class="emoji">💡</span><div><h3>Tips</h3><p>Consells ràpids</p></div></article><article class="card tile" data-go="family"><span class="emoji">👨‍👩‍👧</span><div><h3>Pla familiar</h3><p>Informació important</p></div></article><article class="card tile" data-about><span class="emoji">ℹ️</span><div><h3>Sobre l’app</h3><p>Supervivència · Emergències</p></div></article></div></div>`;
+  return `<div class="page"><section class="hero"><h1>☰ Més</h1><p>Opcions i informació de l’app.</p></section><div class="grid"><article class="card tile offline-tile" data-go="offline"><span class="emoji">🆘</span><div><h3>Mode emergència</h3><p>Accions i dades essencials</p></div></article><article class="card tile" data-go="tips"><span class="emoji">💡</span><div><h3>Tips</h3><p>Consells ràpids</p></div></article><article class="card tile" data-go="family"><span class="emoji">👨‍👩‍👧</span><div><h3>Pla familiar</h3><p>Informació important</p></div></article><article class="card tile" data-about><span class="emoji">ℹ️</span><div><h3>Sobre l’app</h3><p>Supervivència · Emergències</p></div></article></div></div>`;
 }
 
 
@@ -249,6 +250,24 @@ function shareEmergencyLocation(button) {
   },{enableHighAccuracy:true,timeout:15000,maximumAge:30000});
 }
 
+function emergencyOfflinePage() {
+  const f=data.family||{};
+  const personal=String(f.contact||'').trim();
+  const outside=String(f.outside||'').trim();
+  const meeting=String(f.meeting||'').trim();
+  const backup=String(f.meeting2||'').trim();
+  const members=String(f.members||'').trim();
+  const notes=String(f.notes||'').trim();
+  const row=(label,value)=>value?'<div class="offline-data-row"><small>'+label+'</small><strong>'+escapeHtml(value).replace(/\n/g,'<br>')+'</strong></div>':'';
+  return `<div class="page offline-page"><section class="hero hero-danger"><div class="hero-kicker">🆘 PRIORITAT · SEGURETAT</div><h1>Mode emergència</h1><p>Informació essencial i dades familiars guardades en aquest dispositiu.</p><a class="call112" href="tel:112">📞 Trucar al 112</a><button class="btn blue sos-location" type="button" data-share-location>📍 Compartir la meva ubicació</button></section>
+  <section class="offline-priority"><h2>Primer, fes això</h2><ol><li><b>Protegeix-te.</b> Allunya’t del perill immediat i no t’exposis per rescatar objectes.</li><li><b>Truca al 112</b> si hi ha ferits, risc greu, incendi, rescat o perill immediat. Explica què passa, on ets i quantes persones necessiten ajuda.</li><li><b>Segueix les autoritats.</b> Evacua o confina’t segons les instruccions; no improvisis rutes perilloses.</li><li><b>Estalvia bateria.</b> Activa l’estalvi d’energia i envia missatges curts si la xarxa està saturada.</li></ol></section>
+  <section class="info offline-family"><div class="offline-section-head"><h2>👨‍👩‍👧 Dades del teu pla familiar</h2><button type="button" class="offline-edit" data-go="family">Editar</button></div>
+  ${row('Adreça',f.address)}${row('Contacte principal',personal)}${row('Punt de trobada',meeting)}${row('Punt alternatiu',backup)}${row('Contacte fora de la zona',outside)}${row('Membres i telèfons',members)}${row('Informació important',notes)}
+  ${(!f.address&&!personal&&!meeting&&!backup&&!outside&&!members&&!notes)?'<p class="small">Encara no has desat dades familiars. Pots configurar-les ara; es guarden al dispositiu.</p>':''}</section>
+  <div class="grid offline-shortcuts"><article class="card tile" data-go="now"><span class="emoji">🚨</span><div><h3>Guies d’emergència</h3><p>Incendi, inundació, tempesta i més</p></div></article><article class="card tile" data-go="phone"><span class="emoji">☎️</span><div><h3>Telèfons útils</h3><p>Contactes guardats i serveis</p></div></article><article class="card tile" data-go="family"><span class="emoji">👨‍👩‍👧</span><div><h3>Pla familiar</h3><p>Actualitza les dades</p></div></article></div>
+  <div class="info offline-note"><strong>ℹ️ Què funciona sense internet?</strong><p>Aquesta pantalla, les guies i les dades familiars ja guardades es poden consultar quan l’app i els seus fitxers s’han carregat prèviament. La trucada al 112 necessita cobertura mòbil; el GPS necessita permís i pot fallar. Compartir la ubicació pot requerir connexió. Els mapes en línia no funcionen sense internet.</p><p><b>Privacitat:</b> les dades familiars es llegeixen del teu dispositiu i no s’envien automàticament.</p></div></div>`;
+}
+
 function render() {
   const main = document.querySelector('#main');
   if (!main) return;
@@ -257,6 +276,7 @@ function render() {
   else if (route === 'kit') html = checklistPage('kit');
   else if (route === 'bag') html = checklistPage('bag');
   else if (route === 'now') html = nowPage();
+  else if (route === 'offline') html = emergencyOfflinePage();
   else if (route === 'tips') html = tipsPage();
   else if (route === 'family') html = familyPage();
   else if (route === 'more') html = morePage();
