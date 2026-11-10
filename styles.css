@@ -150,3 +150,22 @@
 .offline-data-row strong{color:#10233f;font-size:14px;line-height:1.4}
 .offline-shortcuts{margin-top:14px}
 .offline-note{border-left:4px solid #e3a33d}
+
+/* Simulador i diagnòstic offline */
+.offline-check-list>div{padding:11px 0;border-bottom:1px solid #e7edf3}
+.offline-check-list>div b,.offline-check-list>div small{display:block}
+.offline-check-list>div small{color:#64748b;font-size:12px;margin-top:3px}
+.offline-check-list #offlineCacheStatus{padding:12px;background:#f2f7fb;border-radius:12px;line-height:1.45}
+.sim-progress{display:flex;justify-content:space-between;gap:10px;margin:14px 2px 8px;font-size:12px;font-weight:850;color:#53677e}
+.sim-scene{padding:13px;background:#edf5ff;border-radius:14px;margin-bottom:15px}
+.sim-scene small{font-size:10px;font-weight:900;letter-spacing:.08em;color:#075bc5}
+.sim-scene h2{margin:5px 0;font-size:20px}
+.sim-scene p{margin:0;line-height:1.45}
+.sim-options{display:grid;gap:9px;margin:12px 0}
+.sim-option{width:100%;text-align:left;border:1px solid #d5e1ec;background:#fff;border-radius:13px;padding:13px;font:inherit;font-weight:750;color:#18314e}
+.sim-option:disabled{opacity:.65}
+.sim-feedback{margin:13px 0;padding:14px;border-radius:13px;line-height:1.45}
+.sim-feedback.good{background:#eaf8f0;border:1px solid #b8e5ca;color:#145c35}
+.sim-feedback.review{background:#fff6e7;border:1px solid #f0d49b;color:#76500c}
+.sim-feedback p{margin:7px 0}
+.sim-feedback small{display:block;opacity:.9}
