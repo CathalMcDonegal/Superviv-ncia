@@ -119,11 +119,11 @@ function checklistPage(type) {
   return `<div class="page"><button class="back-link" data-back>‹ Tornar</button><section class="hero"><h1>${title}</h1><p>${text}</p></section>${progressCard(type)}<div class="section-title"><h2>Checklist</h2><button class="reset" data-reset="${type}">Reinicia</button></div>${checklist(type)}<div class="info"><strong>💡 Revisa-ho periòdicament</strong><p>Comprova caducitats, piles, càrregues i que tot continua en bon estat.</p></div></div>`;
 }
 function nowPage() {
-  return `<div class="page"><section class="hero hero-danger"><div class="hero-kicker">🚨 ACCIONS RÀPIDES</div><h1>Què faig ara?</h1><p>Tria la situació. En una emergència real, protegeix-te primer i segueix sempre les instruccions oficials.</p><a class="call112" href="tel:112">📞 Trucar al 112</a></section><div class="emergency-grid">${emergencies.map((e,i)=>`<button class="emergency" data-go="emergency-${i}"><span class="eicon">${e[0]}</span><span><strong>${e[1]}</strong><small>${e[2][0]}</small></span><b>›</b></button>`).join('')}</div></div>`;
+  return `<div class="page"><section class="hero hero-danger"><div class="hero-kicker">🚨 ACCIONS RÀPIDES</div><h1>Què faig ara?</h1><p>Tria la situació. En una emergència real, protegeix-te primer i segueix sempre les instruccions oficials.</p><a class="call112" href="tel:112">📞 Trucar al 112</a><button class="btn blue sos-location" type="button" data-share-location>📍 Compartir la meva ubicació</button><p class="small">Si hi ha perill immediat, truca primer al 112.</p></section><div class="emergency-grid">${emergencies.map((e,i)=>`<button class="emergency" data-go="emergency-${i}"><span class="eicon">${e[0]}</span><span><strong>${e[1]}</strong><small>${e[2][0]}</small></span><b>›</b></button>`).join('')}</div></div>`;
 }
 function emergencyPage(index) {
   const e = emergencies[Number(index)];
-  return `<div class="page"><button class="back-link" data-back>‹ Tornar a emergències</button><section class="hero hero-danger"><div class="big-emoji">${e[0]}</div><h1>${e[1]}</h1><p>Passos inicials i senzills.</p></section><div class="steps">${e[2].map((step,i)=>`<div class="step"><span>${i+1}</span><p>${step}</p></div>`).join('')}</div>${e[3] ? `<div class="info"><strong>Després</strong><ul>${e[3].map(x => `<li>${x}</li>`).join('')}</ul></div>` : ''}<a class="call112" href="tel:112">📞 Trucar al 112</a><div class="info"><strong>Recorda</strong><p>Mantén la calma, protegeix-te primer i facilita informació clara als serveis d’emergència.</p></div></div>`;
+  return `<div class="page"><button class="back-link" data-back>‹ Tornar a emergències</button><section class="hero hero-danger"><div class="big-emoji">${e[0]}</div><h1>${e[1]}</h1><p>Passos inicials i senzills.</p></section><div class="steps">${e[2].map((step,i)=>`<div class="step"><span>${i+1}</span><p>${step}</p></div>`).join('')}</div>${e[3] ? `<div class="info"><strong>Després</strong><ul>${e[3].map(x => `<li>${x}</li>`).join('')}</ul></div>` : ''}<a class="call112" href="tel:112">📞 Trucar al 112</a><button class="btn blue sos-location" type="button" data-share-location>📍 Compartir la meva ubicació</button><div class="info"><strong>Recorda</strong><p>Mantén la calma, protegeix-te primer i facilita informació clara als serveis d’emergència.</p></div></div>`;
 }
 function tipsPage() {
   return `<div class="page"><section class="hero"><div class="hero-kicker">💡 CONSELLS</div><h1>Tips pràctics</h1><p>Petites accions que poden marcar la diferència.</p></section><div class="tips">${tipsData.map(t=>`<article class="tip"><span>${t[0]}</span><div><strong>${t[1]}</strong><p>${t[2]}</p></div></article>`).join('')}</div></div>`;
@@ -229,6 +229,26 @@ function bindPhonePage() {
   document.getElementById('phoneSearch')?.addEventListener('input',renderList);
   renderList();
 }
+
+function shareEmergencyLocation(button) {
+  if (!navigator.geolocation) { alert('Aquest dispositiu no permet obtenir la ubicació. Truca al 112 i explica on ets.'); return; }
+  const original=button.textContent;button.disabled=true;button.textContent='Obtenint ubicació…';
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    const lat=pos.coords.latitude.toFixed(6),lon=pos.coords.longitude.toFixed(6),accuracy=Math.round(pos.coords.accuracy||0);
+    const url='https://www.google.com/maps?q='+lat+','+lon;
+    const message='Necessito ajuda. La meva ubicació aproximada és: '+lat+', '+lon+' (precisió estimada '+accuracy+' m). Mapa: '+url;
+    try {
+      if(navigator.share) await navigator.share({title:'La meva ubicació',text:message,url});
+      else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(message);alert('Ubicació copiada. Ara la pots enganxar en un missatge.');}
+      else {location.href='sms:?body='+encodeURIComponent(message);}
+    } catch(err) { if(err?.name!=='AbortError') alert('No s’ha pogut compartir automàticament. Coordenades: '+lat+', '+lon+' · '+url); }
+    button.disabled=false;button.textContent=original;
+  },err=>{
+    button.disabled=false;button.textContent=original;
+    alert(err.code===1?'Has denegat el permís de localització. Activa’l a la configuració del navegador.':'No s’ha pogut obtenir la ubicació. Busca un punt de referència i comunica’l al 112.');
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:30000});
+}
+
 function render() {
   const main = document.querySelector('#main');
   if (!main) return;
@@ -247,6 +267,7 @@ function render() {
   else { route = 'home'; html = home(); }
   main.innerHTML = html;
   if (route === 'phone') bindPhonePage();
+  main.querySelectorAll('[data-share-location]').forEach(button=>button.addEventListener('click',()=>shareEmergencyLocation(button)));
   main.focus({ preventScroll: true });
   document.querySelectorAll('[data-go]').forEach(el => el.addEventListener('click', () => go(el.dataset.go)));
   document.querySelectorAll('[data-back]').forEach(el => el.addEventListener('click', back));
