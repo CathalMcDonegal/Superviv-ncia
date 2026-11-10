@@ -109,3 +109,14 @@
 .prep-stock-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px;background:#f5f8fb;border-radius:12px}
 .prep-stock-row b,.prep-stock-row small{display:block}.prep-stock-row small{color:#64748b;margin-top:3px}
 @media(max-width:380px){.prep-fields{grid-template-columns:1fr}.prep-score{align-items:flex-start!important}}
+
+.nav-compass-card{display:flex;flex-direction:column;align-items:center;gap:10px;background:#fff;border:1px solid #dce8f0;border-radius:18px;padding:18px;margin:14px 0;box-shadow:var(--shadow);text-align:center}
+.nav-compass{width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,#f8fbff 57%,#dce8f2 58%,#fff 64%);display:grid;place-items:center;border:7px solid #0b3568}
+.nav-compass-ring{width:150px;height:150px;border:2px solid #8da5bb;border-radius:50%;position:relative;transition:transform .15s linear}
+.nav-compass-ring span{position:absolute;font-weight:900;color:#17395e}.nav-compass-ring .n{top:4px;left:calc(50% - 5px);color:#d22}.nav-compass-ring .s{bottom:4px;left:calc(50% - 5px)}.nav-compass-ring .e{right:6px;top:calc(50% - 9px)}.nav-compass-ring .w{left:6px;top:calc(50% - 9px)}
+.nav-needle{position:absolute;left:calc(50% - 12px);top:calc(50% - 30px);font-size:38px;color:#e22;text-shadow:0 1px #fff}
+.nav-position{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;margin:12px 0;overflow-wrap:anywhere}
+.nav-beacons{display:grid;gap:8px;margin-top:12px}.nav-beacon{display:flex;align-items:center;gap:8px;padding:10px;background:#f4f8fc;border-radius:12px}.nav-beacon>div{flex:1;min-width:0}.nav-beacon b,.nav-beacon small{display:block}.nav-beacon small{font-size:11px;color:#64748b}
+.nav-target{margin-top:12px;padding:15px;border-radius:14px;background:#eaf7ff;border:1px solid #c7e5f6}.nav-target-bearing{font-size:30px;font-weight:900;color:#075bc5}
+.nav-track-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0}.nav-track-stats>div{background:#f3f7fb;border-radius:12px;padding:10px 5px;text-align:center}.nav-track-stats small,.nav-track-stats b{display:block}.nav-track-stats small{font-size:10px;color:#64748b}.nav-track-stats b{font-size:17px;margin-top:4px}
+.nav-actions{display:flex;flex-wrap:wrap;gap:8px}.nav-actions .btn{flex:1;min-width:100px}.nav-warning{border-left:4px solid #ff8a00}.nav-warning li{margin:8px 0}
