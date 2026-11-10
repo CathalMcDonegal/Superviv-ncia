@@ -87,3 +87,25 @@
 .phone-add-section{margin-top:16px}
 .phone-add-section h2{margin-bottom:12px}
 .travel-card-head .phone-delete-icon{margin-left:auto}
+
+/* Mòdul de preparació familiar, provisions i kits */
+.prep-home-tile{grid-column:1/-1;min-height:104px;flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;border:2px solid #20b26b;background:linear-gradient(110deg,#e9fff3,#fff)}
+.prep-page .prep-score{display:flex;align-items:center;gap:15px;background:#fff;border:1px solid #dce8f0;border-radius:18px;padding:15px;margin-top:13px;box-shadow:var(--shadow)}
+.prep-score-ring{width:82px;height:82px;flex:none;border-radius:50%;background:conic-gradient(#20b26b 0 70%,#e7eef5 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.prep-score-ring:before{content:"";position:absolute;inset:7px;border-radius:50%;background:#fff}
+.prep-score-ring strong,.prep-score-ring small{position:relative;z-index:1}
+.prep-score-ring strong{font-size:22px}.prep-score-ring small{font-size:10px;color:#64748b;font-weight:800}
+.prep-score p{margin:5px 0;color:#475569;font-size:13px}.prep-score small{color:#64748b}
+.prep-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+.prep-fields label{display:grid;gap:5px;font-size:13px;font-weight:800}
+.prep-fields input{width:100%;min-width:0;padding:12px;border:1px solid #d8e2ec;border-radius:11px;font:inherit}
+.prep-water-result{display:grid;gap:5px;text-align:center;background:#eaf7ff;border:1px solid #c9e5f4;border-radius:15px;padding:15px;margin-top:12px}
+.prep-water-result small{font-weight:800;color:#42647b}.prep-water-result strong{font-size:29px;color:#075bc5}.prep-water-result span{font-size:13px;font-weight:800}
+.prep-checks{display:grid;gap:8px;margin:13px 0}
+.prep-check{display:flex;gap:11px;align-items:center;padding:13px;background:#fff;border:1px solid #e0e8f0;border-radius:13px;line-height:1.35}
+.prep-check input{width:21px;height:21px;flex:none;accent-color:#20b26b}
+.prep-check input:checked+span{text-decoration:line-through;color:#788698}
+.prep-stock-list{display:grid;gap:8px;margin-top:12px}
+.prep-stock-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px;background:#f5f8fb;border-radius:12px}
+.prep-stock-row b,.prep-stock-row small{display:block}.prep-stock-row small{color:#64748b;margin-top:3px}
+@media(max-width:380px){.prep-fields{grid-template-columns:1fr}.prep-score{align-items:flex-start!important}}
