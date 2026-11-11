@@ -1,4 +1,5 @@
 const C='supervivencia-v35';
+const MAP_CACHE='supervivencia-map-tiles-v1';
 const A=[
   './','index.html','styles.css','app.js','features.js','preparedness.js',
   'manifest.json','icon-192.png','icon-512.png','icon-maskable-512.png','apple-touch-icon.png'
@@ -15,14 +16,14 @@ self.addEventListener('fetch',event=>{
   const requestUrl=new URL(request.url);
   if(requestUrl.hostname==='tile.openstreetmap.org'&&request.destination==='image'){
     event.respondWith((async()=>{
-      const cache=await caches.open(C);
+      const cache=await caches.open(MAP_CACHE);
       const saved=await cache.match(request);
       if(saved)return saved;
       try{
         const response=await fetch(request);
         if(response.ok||response.type==='opaque'){
           await cache.put(request,response.clone());
-          const tiles=(await cache.keys()).filter(key=>new URL(key.url).hostname==='tile.openstreetmap.org');
+          const tiles=await cache.keys();
           if(tiles.length>350)await cache.delete(tiles[0]);
         }
         return response;
