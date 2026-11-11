@@ -1,4 +1,4 @@
-const C='supervivencia-v34';
+const C='supervivencia-v35';
 const A=[
   './','index.html','styles.css','app.js','features.js','preparedness.js',
   'manifest.json','icon-192.png','icon-512.png','icon-maskable-512.png','apple-touch-icon.png'
@@ -11,7 +11,26 @@ self.addEventListener('activate',event=>{
 });
 self.addEventListener('fetch',event=>{
   const request=event.request;
-  if(request.method!=='GET'||new URL(request.url).origin!==self.location.origin)return;
+  if(request.method!=='GET')return;
+  const requestUrl=new URL(request.url);
+  if(requestUrl.hostname==='tile.openstreetmap.org'&&request.destination==='image'){
+    event.respondWith((async()=>{
+      const cache=await caches.open(C);
+      const saved=await cache.match(request);
+      if(saved)return saved;
+      try{
+        const response=await fetch(request);
+        if(response.ok||response.type==='opaque'){
+          await cache.put(request,response.clone());
+          const tiles=(await cache.keys()).filter(key=>new URL(key.url).hostname==='tile.openstreetmap.org');
+          if(tiles.length>350)await cache.delete(tiles[0]);
+        }
+        return response;
+      }catch(_){return new Response('',{status:503,statusText:'Mapa no disponible sense connexió'});}
+    })());
+    return;
+  }
+  if(requestUrl.origin!==self.location.origin)return;
   event.respondWith((async()=>{
     const cached=await caches.match(request,{ignoreSearch:true});
     if(cached){
