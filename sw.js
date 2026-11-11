@@ -1,5 +1,4 @@
-const C='supervivencia-v35';
-const MAP_CACHE='supervivencia-map-tiles-v1';
+const C='supervivencia-v36';
 const A=[
   './','index.html','styles.css','app.js','features.js','preparedness.js',
   'manifest.json','icon-192.png','icon-512.png','icon-maskable-512.png','apple-touch-icon.png'
@@ -8,30 +7,11 @@ self.addEventListener('install',event=>{
   event.waitUntil(caches.open(C).then(cache=>cache.addAll(A)).then(()=>self.skipWaiting()));
 });
 self.addEventListener('activate',event=>{
-  event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('supervivencia-')&&key!==C&&key!==MAP_CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));
+  event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('supervivencia-')&&key!==C).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));
 });
 self.addEventListener('fetch',event=>{
   const request=event.request;
-  if(request.method!=='GET')return;
-  const requestUrl=new URL(request.url);
-  if(requestUrl.hostname==='tile.openstreetmap.org'&&request.destination==='image'){
-    event.respondWith((async()=>{
-      const cache=await caches.open(MAP_CACHE);
-      const saved=await cache.match(request);
-      if(saved)return saved;
-      try{
-        const response=await fetch(request);
-        if(response.ok||response.type==='opaque'){
-          await cache.put(request,response.clone());
-          const tiles=await cache.keys();
-          if(tiles.length>350)await cache.delete(tiles[0]);
-        }
-        return response;
-      }catch(_){return new Response('',{status:503,statusText:'Mapa no disponible sense connexió'});}
-    })());
-    return;
-  }
-  if(requestUrl.origin!==self.location.origin)return;
+  if(request.method!=='GET'||new URL(request.url).origin!==self.location.origin)return;
   event.respondWith((async()=>{
     const cached=await caches.match(request,{ignoreSearch:true});
     if(cached){
