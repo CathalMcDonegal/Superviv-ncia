@@ -76,8 +76,13 @@
       $('#markBagReviewed').onclick=()=>{localStorage.setItem('supervivencia-bag-reviewed-v1',String(Date.now()));box.classList.remove('review-due');$('p',box).textContent='Darrera revisió: '+new Date().toLocaleDateString('ca-ES')+'.';};
     }
   }
+  function pin112AtTop(){
+    if(!['now'].includes(location.hash.replace('#',''))&&!location.hash.startsWith('#emergency-'))return;
+    const hero=$('.hero-danger'),call=hero?.querySelector('.call112');
+    if(hero&&call)hero.insertBefore(call,hero.firstChild);
+  }
   function decorate(){
-    addNavAndHome();addOfflineNotice();reviewReminder();
+    addNavAndHome();addOfflineNotice();reviewReminder();pin112AtTop();
     if(location.hash.replace('#','')==='kit'||location.hash.replace('#','')==='bag')checklistEnhance();
     if(location.hash.replace('#','')==='family')familyEnhance();
     if(location.hash.replace('#','')==='more')addDataTools();
