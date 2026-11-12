@@ -29,7 +29,7 @@
         return '<div class="check-enhanced">'+l.outerHTML+'<div class="item-meta"><label>Quantitat<input type="text" data-meta-type="'+type+'" data-meta-id="'+id+'" data-meta-field="qty" value="'+esc(old.qty||'')+'" placeholder="Ex. 6 unitats"></label><label>Caducitat / revisió<input type="date" data-meta-type="'+type+'" data-meta-id="'+id+'" data-meta-field="expiry" value="'+esc(old.expiry||'')+'"></label></div></div>';
       }).join('')+'</div></details>';
     }).join('');
-    list.querySelectorAll('input[type=checkbox]').forEach(el=>el.addEventListener('change',()=>{const t=el.dataset.type,id=el.dataset.id;const data=read('supervivencia-v2',{});data[t]=data[t]||{};data[t][id]=el.checked;write('supervivencia-v2',data);el.closest('.check')?.classList.toggle('done',el.checked);const details=el.closest('details');if(details){const inputs=[...details.querySelectorAll('input[type=checkbox]')];$('summary span',details).textContent=inputs.filter(x=>x.checked).length+'/'+inputs.length;}refreshScore();}));
+    list.querySelectorAll('input[type=checkbox]').forEach(el=>el.addEventListener('change',()=>{const t=el.dataset.type,id=el.dataset.id;const data=read('supervivencia-v2',{});data[t]=data[t]||{};data[t][id]=el.checked;write('supervivencia-v2',data);el.closest('.check')?.classList.toggle('done',el.checked);const all=[...list.querySelectorAll('input[type=checkbox]')],done=all.filter(x=>x.checked).length,pc=Math.round(done/all.length*100),pcLabel=$('.progress-row strong'),pcBar=$('.progress i');if(pcLabel)pcLabel.textContent=pc+'%';if(pcBar)pcBar.style.width=pc+'%';const details=el.closest('details');if(details){const inputs=[...details.querySelectorAll('input[type=checkbox]')];$('summary span',details).textContent=inputs.filter(x=>x.checked).length+'/'+inputs.length;}refreshScore();}));
     list.querySelectorAll('[data-meta-field]').forEach(el=>el.addEventListener('change',()=>setMeta(el.dataset.metaId,el.dataset.metaField,el.value,el.dataset.metaType)));
   }
   function familyEnhance(){
@@ -66,8 +66,18 @@
   }
   function reduceEmergencySteps(){if(!location.hash.startsWith('#emergency-'))return;const steps=$('.steps');if(!steps)return;const rows=[...steps.children];if(rows.length>5){const last=rows.splice(4);const combined=last.map(x=>x.querySelector('p')?.textContent).filter(Boolean).join(' ');rows.push(Object.assign(document.createElement('div'),{className:'step',innerHTML:'<span>5</span><p>'+esc(combined)+'</p>'}));steps.replaceChildren(...rows)}}
   function installHelp(){const b=$('#installBtn');if(!b||b.dataset.iosHelp)return;b.dataset.iosHelp='1';b.addEventListener('click',()=>{const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);if(ios)alert('Per instal·lar-la a iPhone o iPad:\n1. Prem Compartir (el quadrat amb la fletxa).\n2. Tria «Afegeix a la pantalla d’inici».\n3. Confirma amb «Afegeix».\n\nSi no apareix l’opció, obre aquesta pàgina amb Safari.');});}
+  function reviewReminder(){
+    const page=$('.page');if(!page||$('#bagReviewReminder'))return;
+    if(location.hash.replace('#','')==='bag'){
+      const last=localStorage.getItem('supervivencia-bag-reviewed-v1'),due=!last||(Date.now()-Number(last))>183*86400000;
+      const box=document.createElement('section');box.id='bagReviewReminder';box.className='info '+(due?'review-due':'');
+      box.innerHTML='<strong>📅 Revisió de la motxilla cada 6 mesos</strong><p>'+(due?'Toca revisar aigua, aliments, piles, medicació, talles i caducitats.':'Darrera revisió: '+new Date(Number(last)).toLocaleDateString('ca-ES')+'.')+'</p><button class="btn light" id="markBagReviewed">He revisat la motxilla avui</button>';
+      const hero=$('.hero',page);if(hero)hero.after(box);else page.prepend(box);
+      $('#markBagReviewed').onclick=()=>{localStorage.setItem('supervivencia-bag-reviewed-v1',String(Date.now()));box.classList.remove('review-due');$('p',box).textContent='Darrera revisió: '+new Date().toLocaleDateString('ca-ES')+'.';};
+    }
+  }
   function decorate(){
-    addNavAndHome();addOfflineNotice();
+    addNavAndHome();addOfflineNotice();reviewReminder();
     if(location.hash.replace('#','')==='kit'||location.hash.replace('#','')==='bag')checklistEnhance();
     if(location.hash.replace('#','')==='family')familyEnhance();
     if(location.hash.replace('#','')==='more')addDataTools();
