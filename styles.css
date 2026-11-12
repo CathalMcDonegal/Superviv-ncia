@@ -169,3 +169,21 @@
 .sim-feedback.review{background:#fff6e7;border:1px solid #f0d49b;color:#76500c}
 .sim-feedback p{margin:7px 0}
 .sim-feedback small{display:block;opacity:.9}
+
+
+/* v40: mobile-first emergency navigation and preparation tools */
+.bottom-nav{grid-template-columns:repeat(5,minmax(0,1fr));padding-bottom:max(7px,env(safe-area-inset-bottom))}
+.bottom-nav .nav-now{transform:translateY(-13px);background:#c62828!important;color:#fff!important;border:3px solid #fff;border-radius:18px;min-height:66px;box-shadow:0 5px 18px #9f202055;font-weight:800}
+.bottom-nav .nav-now span{font-size:27px}.bottom-nav .nav-now small{color:#fff;font-weight:800}
+.offline-status{display:flex;align-items:center;gap:8px;background:#e8f5ec;color:#145b32;border:1px solid #b9dfc6;border-radius:12px;padding:9px 12px;margin:0 0 12px;font-size:13px;font-weight:800}
+.offline-status>span{color:#1c9a50}.offline-status small{font-weight:500;margin-left:auto;color:#39724e}
+.check-category{background:var(--card,#fff);border:1px solid var(--line,#dce3ec);border-radius:14px;margin:10px 0;overflow:hidden}
+.check-category summary{cursor:pointer;padding:14px 16px;font-weight:800;display:flex;justify-content:space-between;list-style:none}
+.check-category summary::-webkit-details-marker{display:none}.check-category summary:after{content:'⌄';color:#64748b}
+.check-category-body{padding:0 12px 10px}.check-enhanced{border-top:1px solid #e8edf3;padding:8px 0}
+.check-enhanced .check{margin:0}.item-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:6px 4px 2px 48px}
+.item-meta label{font-size:11px;color:#667085;display:grid;gap:4px}.item-meta input{width:100%;min-width:0;border:1px solid #d7dee8;border-radius:8px;padding:8px;font:inherit;font-size:13px;background:#fff;color:#18243a}
+.family-extra{border-top:1px solid #e0e6ee;margin-top:12px;padding-top:12px}
+.data-actions{display:grid;gap:9px}.data-tools{margin-top:16px}
+@media(max-width:390px){.item-meta{grid-template-columns:1fr;padding-left:48px}.offline-status small{font-size:10px}}
+@media print{.topbar,.bottom-nav,.data-tools,.btn,.back-link{display:none!important}body{background:#fff}.page{max-width:100%;padding:0}.info{break-inside:avoid}}
