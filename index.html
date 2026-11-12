@@ -40,7 +40,7 @@
  addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;if(b)b.hidden=false});
  if(b)b.addEventListener('click',async()=>{
   if(dp){dp.prompt();try{await dp.userChoice}catch(_){}dp=null;b.hidden=true}
-  else if(!st)alert('Android: menú ⋮ de Chrome → «Instal·la l’aplicació». iPhone: Compartir → «Afegeix a la pantalla d’inici».');
+  else if(!st&&!/iphone|ipad|ipod/i.test(navigator.userAgent))alert('Android: menú ⋮ de Chrome → «Instal·la l’aplicació».');
  });
  addEventListener('appinstalled',()=>{dp=null;if(b)b.hidden=true});
  if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
