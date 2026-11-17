@@ -285,7 +285,7 @@ async function runOfflineAssetCheck() {
     const keys=await caches.keys(); const cacheNames=keys.filter(k=>k.startsWith('supervivencia-'));
     const cached=new Set();
     for(const name of cacheNames){const c=await caches.open(name);for(const req of await c.keys())cached.add(new URL(req.url).pathname.split('/').pop());}
-    const required=['index.html','styles.css','app.js','features.js','preparedness.js'];
+    const required=['index.html','styles.css','app.js','features.js','preparedness.js','resilience.js'];
     const missing=required.filter(x=>!cached.has(x));
     el.textContent=missing.length?'Fitxers que no consten a la memòria cau: '+missing.join(', '):'🟢 Fitxers principals localitzats a la memòria cau: index, estils, app, guies i preparació.';
   } catch(_){el.textContent='No s’ha pogut llegir la memòria cau. Prova-ho des de l’app instal·lada.';}
