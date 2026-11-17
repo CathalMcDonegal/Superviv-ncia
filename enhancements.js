@@ -29,7 +29,7 @@
         return '<div class="check-enhanced">'+l.outerHTML+'<div class="item-meta"><label>Quantitat<input type="text" data-meta-type="'+type+'" data-meta-id="'+id+'" data-meta-field="qty" value="'+esc(old.qty||'')+'" placeholder="Ex. 6 unitats"></label><label>Caducitat / revisió<input type="date" data-meta-type="'+type+'" data-meta-id="'+id+'" data-meta-field="expiry" value="'+esc(old.expiry||'')+'"></label></div></div>';
       }).join('')+'</div></details>';
     }).join('');
-    list.querySelectorAll('input[type=checkbox]').forEach(el=>el.addEventListener('change',()=>{const t=el.dataset.type,id=el.dataset.id;const data=read('supervivencia-v2',{});data[t]=data[t]||{};data[t][id]=el.checked;write('supervivencia-v2',data);el.closest('.check')?.classList.toggle('done',el.checked);const all=[...list.querySelectorAll('input[type=checkbox]')],done=all.filter(x=>x.checked).length,pc=Math.round(done/all.length*100),pcLabel=$('.progress-row strong'),pcBar=$('.progress i');if(pcLabel)pcLabel.textContent=pc+'%';if(pcBar)pcBar.style.width=pc+'%';const details=el.closest('details');if(details){const inputs=[...details.querySelectorAll('input[type=checkbox]')];$('summary span',details).textContent=inputs.filter(x=>x.checked).length+'/'+inputs.length;}refreshScore();}));
+    list.querySelectorAll('input[type=checkbox]').forEach(el=>el.addEventListener('change',()=>{const t=el.dataset.type,id=el.dataset.id;data[t]=data[t]||{};data[t][id]=el.checked;save();el.closest('.check')?.classList.toggle('done',el.checked);const all=[...list.querySelectorAll('input[type=checkbox]')],done=all.filter(x=>x.checked).length,pc=Math.round(done/all.length*100),pcLabel=$('.progress-row strong'),pcBar=$('.progress i');if(pcLabel)pcLabel.textContent=pc+'%';if(pcBar)pcBar.style.width=pc+'%';const details=el.closest('details');if(details){const inputs=[...details.querySelectorAll('input[type=checkbox]')];$('summary span',details).textContent=inputs.filter(x=>x.checked).length+'/'+inputs.length;}refreshScore();}));
     list.querySelectorAll('[data-meta-field]').forEach(el=>el.addEventListener('change',()=>setMeta(el.dataset.metaId,el.dataset.metaField,el.value,el.dataset.metaType)));
   }
   function familyEnhance(){
@@ -92,6 +92,7 @@
   const old=window.decorateFeatures;
   window.decorateFeatures=()=>{if(old)old();decorate()};
   document.addEventListener('input',e=>{if(e.target.matches('[data-meta-field]'))setMeta(e.target.dataset.metaId,e.target.dataset.metaField,e.target.value,e.target.dataset.metaType)});
+  window.addEventListener('pagehide',()=>{try{save()}catch(_){}});
   window.addEventListener('hashchange',()=>setTimeout(decorate,0));
   window.addEventListener('load',()=>setTimeout(decorate,0));
   setTimeout(decorate,60);
