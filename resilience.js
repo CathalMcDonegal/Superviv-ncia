@@ -47,13 +47,13 @@
   }
   function firstAidPage(){
     const links=[
-      ['❤️','Aturada cardíaca, RCP i DEA','Reconeixement, compressions i ús del desfibril·lador.','https://canalsalut.gencat.cat/ca/salut-a-z/p/primers-auxilis/aturada-cardiaca/'],
+      ['❤️','Aturada cardíaca, RCP i DEA','Reconeixement, compressions i ús del desfibril·lador.','https://canalsalut.gencat.cat/ca/salut-a-z/p/primers-auxilis/reanimacio/'],
       ['🫁','Ennuegament','Diferencia tos efectiva i obstrucció greu.','https://canalsalut.gencat.cat/ca/salut-a-z/p/primers-auxilis/ennuegaments/index.html'],
       ['🩸','Hemorràgies','Pressió directa i actuació davant d’un sagnat greu.','https://canalsalut.gencat.cat/ca/salut-a-z/p/primers-auxilis/hemorragies/index.html'],
-      ['🌡️','Cop de calor','Refredament ràpid i senyals d’alarma.','https://canalsalut.gencat.cat/ca/salut-a-z/p/primers-auxilis/cop-calor/'],
+      ['🌡️','Cop de calor','Refredament ràpid i senyals d’alarma.','https://canalsalut.gencat.cat/ca/vida-saludable/consells-estacionals/estiu/calor/efectes-exces/index.html'],
       ['🔥','Cremades','Què fer i quins remeis cal evitar.','https://canalsalut.gencat.cat/ca/salut-a-z/p/primers-auxilis/cremades/'],
       ['🧠','Ictus','Reconeix els senyals i truca al 112 sense demora.','https://canalsalut.gencat.cat/ca/salut-a-z/p/primers-auxilis/ictus/'],
-      ['⚡','Convulsions','Protecció de la persona i quan demanar ajuda.','https://canalsalut.gencat.cat/ca/salut-a-z/p/primers-auxilis/convulsions/']
+      ['⚡','Convulsions','Protecció de la persona i quan demanar ajuda.','https://canalsalut.gencat.cat/ca/salut-a-z/p/primers-auxilis/']
     ];
     return '<div class="page resilience-page"><button class="back-link" data-resilience-back>‹ Centre d’emergències</button><section class="hero"><div class="hero-kicker">🩺 ACTUACIÓ IMMEDIATA</div><h1>Primers auxilis</h1><p>Protegir, alertar i socórrer (PAS). No et posis en perill i no substitueixis la formació pràctica.</p></section><a class="call112" href="tel:112">📞 TRUCAR AL 112</a><div class="info"><h2>Abans d’ajudar: PAS</h2><ol><li><b>Protegir:</b> comprova que l’entorn sigui segur per a tu, la víctima i les persones del voltant.</li><li><b>Alertar:</b> truca al 112, posa el telèfon en mans lliures i explica què ha passat, on sou i quantes persones necessiten ajuda.</li><li><b>Socórrer:</b> segueix les instruccions de l’operador i ajuda només dins de les teves possibilitats.</li></ol></div><div class="resilience-link-list">'+links.map(x=>'<a class="resilience-link" href="'+x[3]+'" target="_blank" rel="noopener"><span>'+x[0]+'</span><div><b>'+x[1]+'</b><small>'+x[2]+'</small></div><strong>↗</strong></a>').join('')+'</div><div class="info"><h2>🎥 Vídeos del SEM</h2><p>Vídeos divulgatius curts elaborats per professionals del Sistema d’Emergències Mèdiques, incloent RCP, DEA, ictus, convulsions i ennuegament.</p><a href="https://sem.gencat.cat/ca/emergencies-mediques/primers-auxilis/" target="_blank" rel="noopener">Veure els vídeos oficials del SEM ↗</a></div><div class="resilience-note">No improvisis maniobres avançades. En una emergència, segueix les instruccions telefòniques del 112. Les tècniques poden variar segons l’edat i la situació.</div></div>';
   }
@@ -63,7 +63,7 @@
       ['🌦️','Meteocat','Predicció i avisos meteorològics per municipi i comarca.','https://www.meteo.cat/prediccio/general'],
       ['⛈️','AEMET · Avisos','Avisos oficials de fenòmens meteorològics adversos.','https://www.aemet.es/ca/eltiempo/prediccion/avisos'],
       ['🔥','Pla Alfa','Nivell de perill d’incendi forestal per municipi a Catalunya.','https://interior.gencat.cat/ca/serveis/informacio-geografica/visors-i-aplicacions/pla-alfa'],
-      ['🌊','ACA · Estat de rius i avisos','Informació hidrològica i avisos de l’Agència Catalana de l’Aigua.','https://aca.gencat.cat/ca/laigua/estat-del-medi-hidric/'],
+      ['🌊','ACA · Estat del medi hídric','Informació hidrològica i avisos de l’Agència Catalana de l’Aigua.','https://aca.gencat.cat/ca/laigua/estat-del-medi-hidric/'],
       ['🚨','CAT112','Informació del servei d’emergències de Catalunya.','https://112.gencat.cat/ca/'],
       ['🛰️','Mapa de Protecció Civil','Consulta els riscos i elements de protecció civil del territori.','https://interior.gencat.cat/ca/serveis/informacio-geografica/visors-i-aplicacions/']
     ];
