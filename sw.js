@@ -1,6 +1,6 @@
-const C='supervivencia-v43';
+const C='supervivencia-v44';
 const A=[
- './','index.html','styles.css?v=40','app.js?v=23','features.js?v=17','preparedness.js?v=3','enhancements.js?v=42',
+ './','index.html','styles.css?v=40','app.js?v=23','features.js?v=18','preparedness.js?v=3','enhancements.js?v=42',
  'manifest.json?v=9','icon-192.png?v=9','icon-512.png','icon-maskable-512.png','apple-touch-icon.png?v=9'
 ];
 self.addEventListener('install',event=>{
