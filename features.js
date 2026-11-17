@@ -2,10 +2,10 @@
   const FOOD_KEY = 'supervivencia-food-v1';
   const OSM_TILE = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
   const RADIO = [
-    ['VHF','145.500 MHz','Freqüència simplex de crida / coordinació','FM','📻'],
-    ['VHF','145.550 MHz','Ús FM indicat a Espanya en la taula IARU R1','FM','🇪🇸'],
-    ['UHF','433.500 MHz','Freqüència simplex de crida / coordinació','FM','📻'],
-    ['UHF','433.550 MHz','Ús FM indicat a Espanya en la taula IARU R1','FM','🇪🇸'],
+    ['VHF','145.500','Canal d’escolta / crida','FM · MHz','📻'],
+    ['VHF','145.550','Canal FM · ús segons la planificació IARU R1','FM · MHz','🇪🇸'],
+    ['UHF','433.500','Canal d’escolta / crida','FM · MHz','📻'],
+    ['UHF','433.550','Canal FM · ús segons la planificació IARU R1','FM · MHz','🇪🇸'],
     ['HF','7.110 MHz','Centre d’activitat d’emergències IARU Regió 1','Veu · SSB','🇪🇺'],
     ['HF','3.760 MHz','Centre d’activitat d’emergències IARU Regió 1','Veu · SSB','🇪🇺'],
     ['HF','14.300 MHz','Centre d’activitat d’emergències IARU Regió 1','Veu · SSB','🇪🇺']
