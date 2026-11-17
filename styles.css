@@ -229,3 +229,7 @@
 .nav-compass-card>small{max-width:390px;line-height:1.45;color:#53677e}
 .nav-compass-card .map-action{background:#0b3568;color:#fff;padding:0 18px}
 @media(max-width:380px){.nav-compass{width: min(76vw,270px)}.nav-needle:before{border-bottom-width:75px}.nav-needle:after{border-top-width:58px}}
+
+/* Ajustos finals de la rosa graduada */
+.nav-compass-ring{width:auto;height:auto;transform-origin:50% 50%}
+.nav-compass-ring .nav-degree{top:19%;left:50%;transform:translateX(-50%);font-size:8px;white-space:nowrap;letter-spacing:.1em;color:#607080}
